@@ -188,7 +188,7 @@ public function json(Request $request){
 
 public function data(){
     
-print_r($_SERVER);
+// print_r($_SERVER);
 $data = array(
             "search"  => array(
                     "date"            => array(
