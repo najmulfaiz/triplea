@@ -62,7 +62,7 @@ class ApiController extends Controller
 	// $response = [
 	// 			'success'=>true
 	// 			];
-			$succcess = true;
+			$success = true;
 							$message = "ok";
 		}
 
