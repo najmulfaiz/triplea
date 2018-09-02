@@ -64,7 +64,7 @@
     <label>NO HP</label>
     <input type="text" name="no_hp" class="form-control" value="{{$user->nohp}}"> 
   </div>
-  <center><button type="submit" class="btn btn-primary">Ubah</button></center>
+  <center><button type="submit" id="submit" class="btn btn-primary">Ubah</button></center>
   </div>
 
 </div>
@@ -95,13 +95,20 @@
 <script type="text/javascript">
   $(document).on('change','#tipe_akun',function(){
     var val = $(this).val();
+      if(val.length ==0){
+        $("#submit").attr('disabled','disabled');
+      }
+      else{
+       $("#submit").removeAttr('disabled');
       if(val=='1'){
         $("#addition").show();
       }
-      else{
+      if(val=='0'){
         $("#addition").hide();
 
       }
+      }
+      // alert(val);
   });
 </script>
   {{-- expr --}}

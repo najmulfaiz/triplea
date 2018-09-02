@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Cetak Invoice</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -62,7 +62,7 @@ table{
 </style>
   </head>
 
-  <body >
+  <body onload="window.print()">
 
 
     <div class="container">
@@ -78,11 +78,25 @@ table{
         </div>
         <div class="with-margin" style="width: 50%;float: right;">
 <br>
+            @if ($transaction->first()->status_bayar=='0')
             <div style="background: #e74c3c;width: 40%;margin:0 auto;text-transform: uppercase;color: #fff;padding: 10px;margin-top: 0px;width: 50%;">
             
+              {{-- expr --}}
             <center><h5 style="padding: 0;margin: 0;">Belum Dibayar</h5></center>
 
+
             </div>
+            @elseif($transaction->first()->status_bayar=='1')
+
+            <div style="background: #26C281;width: 40%;margin:0 auto;text-transform: uppercase;color: #fff;padding: 10px;margin-top: 0px;width: 50%;">
+            
+              {{-- expr --}}
+            <center><h5 style="padding: 0;margin: 0;">Sudah Dibayar</h5></center>
+
+
+            </div>
+
+            @endif
          
         </div>
         <div class="col-lg-12 with-margin">
@@ -112,6 +126,24 @@ table{
 {{-- <div style="background-color: #00ffe4; height: 100px; width: 100px;">
 Hello, world.
 </div> --}}
+
+<table  border="1" style="width: 100%;pad">
+<tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
+  <td>Event</td><td>{{$transaction->first()->event->nama}}</td>
+</tr>
+<tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
+  <td>Tanggal</td><td>{{date('d-M-Y',strtotime($transaction->first()->event->tanggal))}}</td>
+</tr>
+<tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
+  <td>Kota</td><td>{{$transaction->first()->event->kota->nama}}</td>
+</tr>
+<tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
+  <td>Keterangan Bank</td><td>{{$transaction->first()->keterangan_bank}}</td>
+</tr>
+
+
+</table>
+<br><br>
 <table  border="1" style="width: 100%;pad">
 <tr>
   <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Partisipan</center></td>
@@ -145,7 +177,10 @@ Hello, world.
     <td>  Subtotal</td><td  style="text-align: right"> IDR {{number_format($total,2,',','.')}}</td>
   </tr>
   <tr>
-    <td>Diskon</td><td  style="text-align: right">{{$transaction->first()->diskon}}</td>
+    <td>Diskon
+{!! !empty($transaction->first()->diskon_data) ? "<span style='background-color:#26A65B;padding:5px;color:#fff'>".$transaction->first()->diskon_data->kode."</span>" :'' !!}
+
+    </td><td  style="text-align: right">{{!empty($transaction->first()->diskon_data) ?($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'Rp. '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</td>
   </tr>
   <tr>
     <td>Kode Unik</td><td  style="text-align: right">{{$transaction->first()->validasi_no}}</td>
@@ -155,6 +190,8 @@ Hello, world.
   </tr>
 </table>
 <br><br>
+@if ($transaction->first()->status_bayar=='0')
+  {{-- expr --}}
 Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode unik </b>) ke rekening kami dibawah ini: 
  <div style="width: 30%;height: 100%;">  <br>
 
@@ -171,6 +208,7 @@ Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode 
           </center>
 
           </div>
+@endif
 {{-- </p> --}}
 </div>
 {{-- <div class="card-footer">

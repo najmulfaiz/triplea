@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Triple A Sport Management</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -32,7 +32,7 @@
  
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('{{ asset('assets/img/home-bg.jpg') }}');height: 350px;" >
+    <header class="masthead" style="background-image: url('{{ asset('assets/img/home-bg.jpg') }}');margin-bottom: 0;"  id="masthead">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
@@ -58,17 +58,71 @@
       </div>
     </header>
 
+<style type="text/css">
+
+.event-name-index{
+  margin-left: 20px;
+}
+@media (max-width: 768px) {
+  .event-icon{
+    display: none;
+  }  
+
+.event-name-index{
+  margin-left: 0;
+}
+
+}
+
+
+
+</style>
+      <div style="background: #D91E18;margin-bottom: 50px;">
+      <div class="container">
+      <div class="col-lg-9" style="margin: 0 auto;float: none;color: #fff">
+      <div style="padding: 15px;">
+        
+
+  <div class="form-group" >
+<div class="row">
+<div class="col-lg-1">
+  
+</div>
+  <div class="col-lg-6 col-sm-12" style="padding-left: 0;">
+  <div class="float-left">
+       <i class="fas fa-calendar-alt event-icon" style="font-size: 40px;vertical-align: middle;"></i>
+    <span class="event-name-index">   {{$event->nama}}</span>
+
+  </div>
+
+    
+  </div>
+
+  <div class="col-lg-5 col-sm-12" style="padding-left: 0;">
+<center>
+    <span data-date="{{$date}}" id="getting-started" style="letter-spacing: 1px;font-size: 25px;"></span>
+    </center>
+  </div>
+</div>
+
+  </div>
+
+      </div>
+
+      </div>
+      </div>
+</div>
     <!-- Main Content -->
     <div class="container">
 {{--     <center><h3>Book Your Event</h3></center> --}}
         <div class="row">
         @foreach ($data as $d)
-  <div class="col-lg-4 with-margin">
+  <div class="col-lg-4 with-margin" style="height: 500px;">
 
 <div class="card with-box-shadow">
-      <a href="{{ url('/'.$d->id) }}">
+      <a href="{{ url('/'.str_slug($d->nama,'-').'-'.$d->id) }}">
 
-<div id="bg"  class="bg">
+<div id="bg"  class="bg" style="background-image: url('{{$d->logo}}')">
 
   
 </div>
@@ -103,7 +157,7 @@
 <br>
 
 </div>
-  <a href="{{ url('/'.$d->id) }}" class="btn btn-success btn-block btn-xs">Beli Tiket</a>
+  <a href="{{ url('/'.str_slug($d->nama,'-').'-'.$d->id) }}" class="btn btn-success btn-block btn-xs">Beli Tiket</a>
 
 </div>
 
@@ -117,51 +171,51 @@
     <hr>
 
     <!-- Footer -->
-    <footer>
+<footer class="footer bg-secondary" style="padding: 20px 0 30px;margin-top: 100px;">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
-          </div>
-        </div>
+        <span style="font-size: 16px;" class="text-white">&copy; {{date('Y')}} Triple A Sport Management</span>
       </div>
     </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
+<script src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
     <!-- Custom scripts for this template -->
     <script src="{{ asset('assets/js/clean-blog.min.js') }}"></script>
 
-<style type="text/css">
 
+<script type="text/javascript">
+  
+</script>
+<script type="text/javascript">
+  $("#getting-started")
+  .countdown($("#getting-started").attr('data-date'), function(event) {
+    $(this).text(
+      event.strftime('%D days %H:%M:%S')
+    );
+  });
+var images = [
+  "{{ asset('/img/bg1.jpeg') }}",
+  "{{ asset('/img/bg2.jpeg') }}",
+  "{{ asset('/img/bg3.jpeg') }}",
+];
+var imageHead = document.getElementById("masthead");
+var i = 0;
+setInterval(function() {
+      imageHead.style.backgroundImage = "url(" + images[i] + ")";
+      i = i + 1;
+      if (i == images.length) {
+        i =  0;
+      }
+}, 9000
+);
+</script>
+<style type="text/css">
+.masthead{
+  -webkit-transition: background-image 0.9s ease-in-out;
+transition: background-image 0.9s ease-in-out;
+}
 @media (min-width: 1200px){
 .container {
     max-width: 90%;
@@ -232,8 +286,12 @@ padding: .40rem 1rem;
 header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
     padding: 140px 0;
 }
+.masthead{
+  height: 350px;
+}
 
 }
+
 </style>
   </body>
 </html>

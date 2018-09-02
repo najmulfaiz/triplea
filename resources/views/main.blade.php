@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Triple A Sport Management</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -17,31 +17,33 @@
     <link href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('assets/css/clean-blog.min.css') }}" rel="stylesheet">
 {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> --}}
 <link rel="stylesheet" type="text/css" href="{{ asset('font-awesome/fontawesome/css/all.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
 
   </head>
 
-  <body style="font-family: Open Sans;background-color: #f5f5f5;">
+  <body style="font-family: 'Muli', sans-serif;background-color: #f5f5f5;font-size: 15px;">
     <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top is-fixed is-visible" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top is-fixed-custom is-visible" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">Start Bootstrap</a>
+        <a class="navbar-brand" href="{{ url('/') }}">Booking Online</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
+           
+            @if (empty(session('userid')))
+ <li class="nav-item">
               <a class="nav-link" href="{{ url('/') }}">Home</a>
             </li>
-            @if (empty(session('userid')))
-
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/login') }}">Login</a>
             </li>
@@ -61,6 +63,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('/transaksi') }}">Transaksi {!!$jml_transaksi!=0?'<span class="badge badge-success">'.$jml_transaksi.'</span>':''!!}</a>
+            </li>
 
                         <li class="nav-item">
                     <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
@@ -71,28 +76,80 @@
         </div>
       </div>
     </nav>
+
+
+<style type="text/css">
+@media only screen and (min-width: 992px){
+#mainNav.is-fixed-custom {
+    position: fixed;
+    top: -72px;
+    -webkit-transition: -webkit-transform .2s;
+    -moz-transition: -moz-transform .2s;
+    transition: transform .2s;
+    border-top: 5px solid #fff;
+    background-color: #3bafda;
+}
+}
+</style>
     <!-- Page Header -->
     <div class="content">
     @yield('content')
     <!-- Footer -->
-    <footer>
+<footer class="footer bg-secondary" style="padding: 20px 0 30px;margin-top: 100px;">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
-          </div>
-        </div>
+        <span class="text-white">&copy; {{date('Y')}} Booking Online</span>
       </div>
     </footer>
-
     <!-- Bootstrap core JavaScript -->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
+    <script src="{{ asset('/js/jquery.debounce.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <!-- Custom scripts for this template -->
 <!--     <script src="{{ asset('assets/js/clean-blog.min.js') }}"></script> -->
+<script type="text/javascript" src="http://opoloo.github.io/jquery_upload_preview/assets/js/jquery.uploadPreview.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js
+"></script>
+
 
 <style type="text/css">
+
+#image-preview {
+  width: 300px;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #ecf0f1;
+}
+#image-preview input {
+  line-height: 200px;
+  font-size: 200px;
+  position: absolute;
+  opacity: 0;
+  z-index: 10;
+}
+#image-preview label {
+  position: absolute;
+  z-index: 5;
+  opacity: 0.8;
+  cursor: pointer;
+  background-color: #bdc3c7;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  line-height: 50px;
+  text-transform: uppercase;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+}
+
 @media (min-width: 1200px){
 .container {
     max-width: 90%;

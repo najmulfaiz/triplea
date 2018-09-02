@@ -13,7 +13,21 @@
         <div class="row">
         <div class="col-lg-10 with-margin" style="float: none;margin: 0 auto;">
 
-<div class="card">
+@if (session('danger'))
+<div class="alert alert-danger">
+  
+  {{session('danger')}}
+</div>
+@endif
+@if (session('success'))
+<div class="alert alert-success">
+  
+  {{session('success')}}
+</div>
+
+  {{-- expr --}}
+@endif
+<div class="card" style="min-height: 900px;">
 <!-- Image -->
 
 <!-- Text Content -->
@@ -55,7 +69,7 @@
     <form action="{{ url('buy') }}" method="post">
     {{csrf_field()}}  
     <input type="hidden" name="id_kategori" value="{{$g->kategori['id']}}">
-    <button type="submit" style="padding: 5px 5px;" class="btn btn-primary">Beli</button>
+    <button type="submit" class="btn btn-primary">Beli</button>
     </form>
   </td>
 </tr>
@@ -70,24 +84,32 @@
   </div>
 </div>
 <h3>Info Event</h3>
-<div class="float-right">
-{{-- {{$user->tipe_akun}} --}}
-@if ($user->tipe_akun=='0')
-  {{-- expr --}}
-  <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-@elseif($user->tipe_akun==1)
-<a class="btn btn-primary" href="{{ url('/checkout/'.Request::segment(1)) }}">Beli</a
-@endif
-  Beli Tiket
-</button>
+
+
+<div class="row">
+<div class="col-lg-4">
+    <img src="{{$data->logo}}" class="rounded img img-responsive" style="width: 100%;">
 </div>
+<div class="col-lg-4">
+  <ul class="list-group">
 
-
-<ul class="list-group">
-  <li class="list-group-item"> <i class="fas fa-calendar-alt"></i> {{$data->nama}}</li>
-  <li class="list-group-item"><i class="fas fa-map-marker"></i> {{$data->kota->nama}}</li>
+  <li class="list-group-item"> <i class="fas fa-flag"  ></i><span style="font-size: 15px;margin-left: 2px;">{{$data->nama}}</span></li>
+  <li class="list-group-item"><i class="fas fa-calendar-alt"></i><span style="font-size: 15px;margin-left: 2px;"> {{$data->tanggal}}</span></li>
+  <li class="list-group-item"><i class="fas fa-map-marker"></i> <span style="font-size: 15px;margin-left: 2px;">{{$data->kota->nama}}</span></li>
+  <li class="list-group-item"> <span style="font-size: 15px;margin-left: 2px;">{!!$data->eventDetail!=null ? $data->eventDetail->status_registrasi=='0'? '<span class="badge badge-danger">Close</span>':'<span class="badge badge-success">Open</span>' :''!!}</span></li>
   <li class="list-group-item"></li>
 </ul>
+
+</div>  
+<div class="col-lg-3">
+  
+<div class="float-right">
+{{-- {{$user->tipe_akun}} --}}
+
+</button>
+</div>
+</div>
+</div>
 
 
   
@@ -108,27 +130,19 @@
 <div class="tab-content" id="myTabContent">
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-    
-  <h3>Detail</h3>
-  <table class="table table-bordered">
-    <tr>
-      <td>Status Registrasi</td><td>{!!$data->eventDetail->status_registrasi=='0'? '<span class="badge badge-danger">Close</span>':'<span class="badge badge-success">Open</span>'!!}</td>
-    </tr>
-    <tr>
-      <td>Deskripsi</td><td>{{$data->eventDetail->deskripsi}}</td>
-    </tr>
-  </table>
+{{-- <h3>Deskripsi</h3> --}}
+{{$data->eventDetail!=null ? $data->eventDetail->deskripsi :''}}
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-  <h3>Fasilitas</h3>
+{{--   <h3>Fasilitas</h3> --}}
 
-  {!!$data->fasilitas->deskripsi!!}
+  {!!$data->fasilitas != null ? $data->fasilitas->deskripsi :''!!}
   </div>
   <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-
+{{-- 
   <h3>Event Term</h3>
-
-  {!!$data->eventTerm->deskripsi!!}
+ --}}
+  {!!$data->eventTerm!=null ? $data->eventTerm->deskripsi:''!!}
   </div>
 </div>
 </div>
@@ -148,4 +162,119 @@
       </div>
     </div>
 
+<style type="text/css">
+  .bottom-checkout{
+    position: fixed;bottom: 0;background: #fff;box-shadow: 0px -5px 5px  rgba(0,0,0,0.2);padding: 20px;width: 100%;
+  }
+  .no-padding-right{
+    padding-right: 0;
+  }
+    @media (max-width: 768px) {
+    .icon-rotate{
+      display: none;
+    }
+    .event-name{
+      font-size: 18px;
+    }
+
+  .btn-checkout{
+    margin: 0;padding: 10px;
+/*    float: right;*/
+width: 100%;
+  }
+
+
+  .height-animate{
+  bottom: 0;
+transition: bottom 0.8s ease-in-out;
+  }
+  .hide-animate{
+    transition: bottom 0.8s ease-in-out;
+    bottom: -10000px;
+  }
+  }
+  .icon-rotate{
+    font-size: 35px;margin-top:10px;-webkit-transform: rotate(-35deg);
+
+/* Firefox */
+-moz-transform: rotate(-35deg);
+
+/* IE */
+-ms-transform: rotate(-35deg);
+
+/* Opera */
+-o-transform: rotate(-35deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  }
+  .event-name{
+    display: inline-block;margin-left: 10px;
+  }
+  .btn-checkout{
+    margin: 0;padding: 10px;
+    margin-top: 10px;
+    float: right;
+  }
+</style>
+<div style="" class="bottom-checkout height-animate" id="btm-checkout">
+<div class="container">
+  
+<div class="row">
+  <div class="col-lg-12" class="no-padding-right">
+
+
+  <i class="fas fa-ticket-alt icon-rotate" ></i> <h3 class="event-name">{{$data->nama}}</h3>
+{{-- <div class="float-right"> --}}
+
+@if ($data->eventDetail!=null)
+  {{-- expr --}}
+  @if ($data->eventDetail->status_registrasi==1)
+@if ($user->tipe_akun=='0')
+  {{-- expr --}}
+{{--   {!!$data->eventDetail!=null ? $data->eventDetail->status_registrasi=='0'? '<span class="badge badge-danger">Close</span>':'<span class="badge badge-success">Open</span>' :''!!} --}}
+
+  <button type="button"  class="btn btn-success btn-checkout"  data-toggle="modal" data-target="#exampleModal" >
+  Beli
+  </button>
+@elseif($user->tipe_akun==1)
+<a class="btn btn-success btn-checkout" href="{{ url('/checkout/'.$data->id) }}">beli</a>
+@endif
+  @else
+    <button disabled="" type="button"  class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+  .
+  </button>
+
+  @endif
+@endif
+
+
+  {{-- 
+</div> --}}
+
+  </div>
+</div>
+</div>
+</div>
 @endsection
+
+@push('script')
+<script type="text/javascript">
+    // $("#btm-checkout").hide();
+
+    $("#btm-checkout").removeClass('height-animate');
+    $("#btm-checkout").addClass('hide-animate');
+$(window).scroll(function(){
+  if($(window).scrollTop()>1){
+    $("#btm-checkout").addClass('height-animate');
+    $("#btm-checkout").removeClass('hide-animate');    
+  }
+  else{
+    $("#btm-checkout").removeClass('height-animate');
+    $("#btm-checkout").addClass('hide-animate');
+
+  }
+})
+</script>
+  {{-- expr --}}
+@endpush

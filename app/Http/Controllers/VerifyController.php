@@ -15,10 +15,19 @@ class VerifyController extends Controller
 
 		if ($data->count()!=0) {
 			$userid = $data->first()->userid;
-			$user = LoginMember::find($userid);
-			$user->status =1;
-			$user->save();
-			$request->session()->flash('success','Email Berhasil diaktifkan');
+			// echo $userid;
+			$user = LoginMember::find($userid);				// echo "string";
+			if (count($user)==0) {
+				# code...
+				// echo "string";
+			$request->session()->flash('danger','User Tidak Ditemukan');
+			return redirect('login/');
+			}
+			else{
+				if ($user->status == 0) {
+			$user->status = 1;
+			$user->save();				
+						$request->session()->flash('success','Email Berhasil diaktifkan');
 			if (session('userid') == null) {
 
 			return redirect('/login');
@@ -26,6 +35,16 @@ class VerifyController extends Controller
 			else{
 					return redirect('dashboard');
 			}
+				}
+				else{
+				$request->session()->flash('danger','Kode Verifikasi sudah kadaluarsa');
+							return redirect('/login');
+	
+				}
+
+			}
+
+
 		}
 		else{
 			$request->session()->flash('danger','Kode Verifikasi Salah');

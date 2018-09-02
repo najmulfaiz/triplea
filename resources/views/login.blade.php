@@ -1,6 +1,8 @@
 @extends('main')
 
 @section('content')
+
+  <style type="text/css"> .content{ padding-top: 90px; } </style>
   {{-- expr --}}
 
     <div class="container">

@@ -6,6 +6,7 @@
     <div class="container">
 {{--     <center><h3>Book Your Event</h3></center> --}}
 
+  <style type="text/css"> .content{ padding-top: 90px; } </style>
 <form action="{{ url('register') }}" method="post">
 {{csrf_field()}}
 
@@ -73,3 +74,8 @@
     </div>
 <br><br><br>
 @endsection
+
+@push('script')
+lor
+  {{-- expr --}}
+@endpush

@@ -45,22 +45,38 @@
       <option value="">Pilih Kategori</option>
       @foreach ($group->get() as $g)
         {{-- expr --}}
+        @if($g->kategori!=null)
         <option {{$g->id==$kategori_id?'selected':''}} value="{{$g->id}}">{{$g->kategori['nama']}}</option>
+        @endif
       @endforeach
     </select></td>
   </tr>
   <tr>
-    <td>Harga</td><td class="harga">{{$kategori->first()->harga}}</td>
+    <td>Harga</td><td class="harga">{{number_format($kategori->first()->harga,2,',','.')}}</td>
   </tr>
+      <input type="hidden" id="eventid" name="eventid" value="{{$eventid}}">
   <input type="hidden" name="total" id="total" value="{{$kategori->first()->harga}}">
 
-<input type="hidden" name="jumlah_total" id="input-jumlah-total" value="0">
+<input type="hidden" name="jumlah_total" id="input-jumlah-total" value="{{$kategori->first()->harga}}">
 <input type="hidden" name="diskon" id="input-diskon" value="0">
-
-
+<input type="hidden" name="" id="harga_total" value="{{$kategori->first()->harga}}">
+<input type="hidden" name="diskon" value="" id="diskon_id">
+<input type="hidden" name="" id="diskon_type">
+<input type="hidden" name="id_diskon" id="id_diskon">
+<input type="hidden" name="" id="diskon_int">
 </table>
+<div class="row">
+<div class="col-lg-6">
+<div class="form-group">
+<label>Nama BIB</label>
+<input type="text" name="nama_bib" class="form-control" id="nama_bib" required="">
+  
+</div>
+  
+</div>
 
-
+  
+</div>
   <h4>Jersey</h4>
 <div class="row">
 @if ($jersey->count() >0 )
@@ -127,7 +143,7 @@
 
 <div class="form-group">
   <label>Harga</label>
-  <h3>    Rp. <span id="harga-total">{{$kategori->first()->harga}}</span></h3>
+  <h3>    Rp. <span id="harga-total">{{number_format($kategori->first()->harga,0,',','.')}}</span></h3>
 </div>
 
 <div class="form-group">
@@ -143,7 +159,7 @@
 <div class="form-group">
   <label>Jumlah Total</label>
   <div class="alert alert-success">
-  <h3 >    Rp. <span id="jumlah-total">0</span></h3>
+  <h3 >    Rp. <span id="jumlah-total">{{number_format($kategori->first()->harga,0,',','.')}}</span></h3>
   </div>
 </div>
 
@@ -263,15 +279,15 @@
   </div>
   <div class="form-group">
     <label>Kota</label><br>
-  {{$personal->kota->nama}}
+  {{!empty($personal->kota) ? $personal->kota->nama : ''}}
   </div>
   <div class="form-group">
     <label>Negara</label><br>
-  {{$personal->negara->nama}}
+  {{!empty($personal->negara) ? $personal->negara->nama : ''}}
   </div>
   <div class="form-group">
     <label>Kebangsaan</label><br>
-  {{$personal->residence_s->nama}}
+  {{!empty($personal->residence_s) ? $personal->residence_s->nama:''}}
   </div>
 </div>
   
@@ -333,11 +349,32 @@
   (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
 </script>
 <script type="text/javascript">
+
+  function rupiah(rupiah){
+    var bilangan = rupiah == null ? 0 : rupiah;
+  var number_string = bilangan.toString();
+  sisa  = number_string.length % 3;
+  rupiah  = number_string.substr(0, sisa);
+  ribuan  = number_string.substr(sisa).match(/\d{3}/g);
+    
+if (ribuan) {
+  separator = sisa ? '.' : '';
+  rupiah += separator + ribuan.join('.');
+}
+
+return rupiah
+  }
+
 $(document).on('click','#buy-btn',function(){
 
     var jersey = $('input[name=jersey]:checked').val();
     if(typeof jersey!='undefined'){
-      return true;
+      if($("#nama_bib").val().length==0){
+      alert("Masukan Nama BIB");        
+      }
+      else{
+        return true;
+      }
     }
     else{
       alert("Silahkan Memilih Jersey Terlebih Dahulu");
@@ -346,7 +383,7 @@ $(document).on('click','#buy-btn',function(){
 });
 $("#kode_diskon").keyup(  $.debounce(500,function(){
   var val = $(this).val();
-  var harga = $("#harga-total").text();
+  var harga = $("#harga_total").val();
   if(harga=='0'){
       $(this).val('');
       alert("Silahkan Pilih Partisipan Terlebih Dahulu");
@@ -356,7 +393,8 @@ $("#kode_diskon").keyup(  $.debounce(500,function(){
   $.ajax({
     url: "{{ url('/kode-diskon') }}",
     data: {
-      diskon: val
+      diskon: val,
+      id_event: $("#eventid").val()
     },
     method: "GET",
     success:function(res){
@@ -365,15 +403,41 @@ $("#kode_diskon").keyup(  $.debounce(500,function(){
         $(".diskon-wrap").show();
       if(res.status=="ok"){
         $(".diskon-wrap").show();
-        console.log("ok");
-        $("#diskon").text(res.data.potongan);
-        $("#input-diskon").val(res.data.potongan);
-        console.log(harga);
-        $("#input-jumlah-total").val(parseInt(harga)-parseInt(res.data.potongan));
-        $("#jumlah-total").text(parseInt(harga)-parseInt(res.data.potongan));
+        $("#diskon_type").val(res.data.diskon_type);
+        $("#diskon_id").val(res.data.id);
+        $("#diskon_int").val(res.data.diskon_int);
+
+        var tipe = $("#diskon_type").val();
+        console.log(tipe);
+        if(tipe=='2'){
+
+          var diskon_int = $('#diskon_int').val();
+          var total = harga*parseInt(diskon_int)/100;
+
+        $("#diskon").text(res.data.diskon);
+        $("#input-diskon").val(res.data.diskon_int);
+        // console.log(harga);
+        $("#input-jumlah-total").val(parseInt(harga)-total);
+        $("#jumlah-total").text(rupiah(parseInt(harga)-total));
+
+        }
+        else{
+        $("#diskon").text(rupiah(res.data.diskon_int));
+        $("#input-diskon").val(res.data.diskon_int);
+        // console.log(harga);
+        $("#input-jumlah-total").val(parseInt(harga)-parseInt(res.data.diskon_int));
+        $("#jumlah-total").text(rupiah(parseInt(harga)-parseInt(res.data.diskon_int)));
+        }
+        $("#id_diskon").val(res.data.id);
+        // console.log("ok");
+          $("#kode_diskon").attr('readonly','readonly');
 
       }
       else{
+        $("#input-diskon").val(0);
+        $("#input-jumlah-total").val(parseInt(harga));
+
+        $("#jumlah-total").text(rupiah(parseInt(harga)));        
         $(".diskon-wrap").hide()
 
       }
@@ -387,6 +451,7 @@ $(document).on('change','#kategori',function(){
     // alert("ok");
     var val = $(this).val();
     var diskon = $("#diskon").text();
+    // alert("lp");
 
     var inputDiskon = $("#input-diskon").val();
     // alert(val);
@@ -395,15 +460,55 @@ $(document).on('change','#kategori',function(){
       method: "GET",
       success: function(res){
         // console.log(res);
-        $(".harga").text(res.harga);
-        $("#harga-total").text(res.harga);
-        var hargaTotal = $("#harga-total").text();
-        if(inputDiskon!='0' ){
+        $(".harga").text(rupiah(res.harga));
+        $("#harga-total").text(rupiah(res.harga));
+        $("#total").val(res.harga);
+        $("#harga_total").val(res.harga);
+        $("#eventid").val(res.id_event);
+        var hargaTotal = $("#harga_total").val();
+        console.log(inputDiskon);
+        if(inputDiskon == 0){
+          // console.log()
           console.log(hargaTotal);
-        $("#jumlah-total").text(parseInt(hargaTotal)-parseInt(diskon));
+          
+        $("#input-jumlah-total").val(parseInt(res.harga)-parseInt(inputDiskon));
+          
+        // $("#harga-total").text(rupiah(parseInt(hargaTotal)-parseInt(diskon)));        
+        $("#jumlah-total").text(rupiah(parseInt(hargaTotal)-parseInt(inputDiskon)));
         }
         else{
-          $("#jumlah-total").text(res.harga); 
+        var tipe = $("#diskon_type").val();
+
+        if(tipe=='2'){
+
+          console.log('x');
+          var harga = $("#harga_total").val();
+          var diskon_int = $('#diskon_int').val();
+          var total = harga*parseInt(diskon_int)/100;
+
+        // $("#diskon").text(res.data.diskon);
+        // $("#input-diskon").val(res.data.diskon_int);
+        // console.log(harga);
+        $("#input-jumlah-total").val(parseInt(harga)-total);
+        $("#jumlah-total").text(rupiah(parseInt(harga)-total));
+
+        }
+        else{
+        // $("#diskon").text(rupiah(res.data.diskon_int));
+        // $("#input-diskon").val(res.data.diskon_int);
+        // console.log(harga);
+            console.log('x');
+          var harga = $("#harga_total").val();
+          var diskon_int = $('#diskon_int').val();
+          var total = harga;
+
+        // $("#diskon").text(res.data.diskon);
+        // $("#input-diskon").val(res.data.diskon_int);
+        // console.log(harga);
+        $("#input-jumlah-total").val(parseInt(harga)-diskon_int);
+        $("#jumlah-total").text(rupiah(parseInt(harga)-diskon_int));
+
+        }
         }
 
 

@@ -12,14 +12,27 @@
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     
   <h3>Profil</h3>
-  <form id="form" action="{{ url('/update-personal/'.$id) }}" method="post">
+  <form id="form" action="{{ url('/update-personal/'.$id) }}" method="post" enctype="multipart/form-data">
+  <div class="col-lg-6" style="float: none;margin: 0 auto;">
+         <div id="image-preview" class="image-preview-2" style="background-image: url('uploads/{{$personal->foto_ktp}}');background-position: center center; background-size: cover;">
+  <label class="image-label-2" for="image-upload" id="image-label">ID Card</label>
+  <input class="image-upload-2" type="file" name="image" id="image-upload" />
+</div>
+<p id="error1" style="display:none; color:#FF0000;">
+Format Gambar Harus JPG, JPEG, PNG or GIF.
+</p>
+<p id="error2" style="display:none; color:#FF0000;">
+Maksimal Ukuran Gambar 200KB
+</p>
+
+  </div>
   <div class="row">
 
 <div class="col-lg-6">
 {{csrf_field()}}
   <div class="form-group">
     <label>NIK</label>
-    <input type="text" name="nik" class="form-control" value="{{$personal==null ? '' : $personal->nik}}">  
+    <input type="text" name="nik" class="form-control" data-id="{{$personal==null ? '' : $personal->nik}}" value="{{$personal==null ? '' : $personal->nik}}" id="nik">  
   </div>
   <div class="form-group">
     <label>Nama Awal</label>
@@ -65,16 +78,7 @@
     <label>Alamat</label>
     <textarea class="form-control" name="alamat">{{$personal==null ? '' : $personal->alamat}}</textarea>
   </div>
-  <div class="form-group">
-    <label>Kota</label>
-    <select class="form-control" name="kota">
-      <option value="">Pilih Kota</option>
-      @foreach ($kota as $k)
-      <option {{$personal!=null ? ($personal->id_kota ==$k->id ? 'selected':'') :''}} value="{{$k->id}}">{{$k->nama}}</option>
-        {{-- expr --}}
-      @endforeach
-    </select>
-  </div>
+
   <div class="form-group">
     <label>Negara</label>
 
@@ -98,7 +102,26 @@
     </select>
   </div>
 
+  <div class="form-group">
+  <label>Provinsi</label>
+  <select class="form-control select2" name="provinsi" id="provinsi" data-value="{{$personal->id_provinsi}}">
+    
+  </select>
+    
+  </div>
+  <div class="form-group">
+    <label>Kota</label>
+    <select class="form-control select2" name="kota" id="kota" data-value="{{$personal->id_kota}}">
+      <option value="">Pilih Provinsi Terlebih Dahulu</option>
+    </select>
+  </div>
+
+
+
 </div>
+  
+</div>
+<div class="msg">
   
 </div>
 <br><br>

@@ -8,16 +8,31 @@
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     
-  <h3>Profil</h3>
-  <form id="form" action="{{ url('/personal/tambah') }}" method="post">
+  <h3>Tambah Personal</h3>
+  <form id="form" action="{{ url('/personal/tambah') }}" method="post" enctype="multipart/form-data">
+  <div class="col-lg-6" style="float: none;margin: 0 auto;">
+      <div id="image-preview" class="image-preview" style="background-image: url('uploads/id-card.png');background-position: center center; background-size: cover;">
+  <label class="image-label" for="image-upload" id="image-label">ID Card</label>
+  <input class="image-upload" type="file" name="image" id="image-upload" />
+</div>
+
+<p id="error1" style="display:none; color:#FF0000;">
+Format Gambar Harus JPG, JPEG, PNG or GIF.
+</p>
+<p id="error2" style="display:none; color:#FF0000;">
+Maksimal Ukuran Gambar 200KB
+</p>
+
+  </div>
   <div class="row">
 
 <div class="col-lg-6">
 {{csrf_field()}}
   <div class="form-group">
     <label>NIK</label>
-    <input type="text" name="nik" class="form-control" >  
+    <input type="text" name="nik" class="form-control nik-for-modal" id="nik">  
   </div>
+
   <div class="form-group">
     <label>Nama Awal</label>
     <input type="text" name="nama_awal" class="form-control" >  
@@ -50,7 +65,7 @@
   </div>
   <div class="form-group">
     <label>Tanggal Lahir</label>
-    <input type="date" name="tgl_lahir" class="form-control">  
+    <input type="date" name="tgl_lahir" class="form-control" required="">    
   </div>
 </div>
 <div class="col-lg-6">
@@ -62,18 +77,9 @@
     <label>Alamat</label>
     <textarea class="form-control" name="alamat"></textarea>
   </div>
-  <div class="form-group">
-    <label>Kota</label>
-    <select class="form-control" name="kota">
-      <option value="">Pilih Kota</option>
-      @foreach ($kota as $k)
-      <option value="{{$k->id}}">{{$k->nama}}</option>
-        {{-- expr --}}
-      @endforeach
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Negara</label>
+
+    <div class="form-group">
+    <label>Kebangsaan</label>
 
   <select class="form-control" name="negara" required="">
   <option value="">Pilih Negara</option>
@@ -84,7 +90,7 @@
   </select>
   </div>
   <div class="form-group">
-    <label>Tempat Tinggal</label>
+    <label>Negara Tempat Tinggal</label>
     <select class="form-control" name="tempat_tinggal" required=""> 
       
   <option value="">Pilih Tempat Tinggal</option>
@@ -95,11 +101,32 @@
     </select>
   </div>
 
+  <div class="form-group">
+  <label>Provinsi</label><br>
+
+  <select class="form-control select2" name="provinsi" id="provinsi">
+    
+  </select>
+    
+  </div>
+  <div class="form-group">
+    <label>Kota</label>
+    <br>
+    <select class="form-control select2" name="kota" id="kota">
+      <option value="">Pilih Provinsi Terlebih Dahulu</option>
+    </select>
+  </div>
+
+
 </div>
   
 </div>
+<div class="msg">
+  
+</div>
 <br><br>
-<center><button id="submit" type="submit" class="btn btn-primary">Simpan</button></center>
+
+<center><button id="submit" type="submit" class="btn btn-primary submit-profil">Simpan</button></center>
 </form>
 
   </div>
@@ -131,3 +158,5 @@
 
   </div>
 </div>
+
+
