@@ -403,13 +403,14 @@ $code = $char . sprintf("%04s", $noUrut);
 	$transaction->validasi_no =  $unique;
 	$transaction->id_login_member =  session('userid');
 	$transaction->harga_akhir = $total_harga+$unique;
-
+$transaction->keterangan_bank='-';
 	$transaction->save();
 
-	$tr = Transaction::find($code);
-	$event = Event::find($eventid);
-	$tr->keterangan_bank = '[#'.$code.'] Pending Payment ATM Transfer FOR '.$event->nama;
-	$tr->save();
+	// $tr = Transaction::find($code);
+	// $event = Event::find($eventid);
+
+	// $tr->keterangan_bank = "-";
+	// $tr->save();
 
 
 
@@ -455,6 +456,7 @@ $jml_total = $request->total;
 	$transaction->diskon = $diskon;
 	$transaction->tgl_transaksi = date('Y-m-d H:i:s');
 	$transaction->validasi_no =  $unique;
+	$transaction->keterangan_bank='-';
 	$transaction->harga_akhir = $total+$unique;
 	$transaction->id_login_member =  session('userid');
 	$transaction->save();
@@ -498,17 +500,23 @@ $jml_total = $request->total;
 		// 	echo "string";
 		// }
 
+
+
 		
 		$total = $dt->sum('harga');
+
+		// $code = $transaction->first()-;
+		$event = Event::find($transaction->first()->id_event);
+		$subject = 	'[#'.$code.'] Pending Payment ATM Transfer FOR '.$event->nama;
 
 		$userdata = LoginMember::where('id',$transaction->first()->id_login_member)->first();
 
 			$to = $userdata->email;
-$mail=    Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to) {
+$mail=    Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
 
-        $message->from('fariswidhiarta123@gmail.com', 'Invoice');
+        $message->from('triple.a@gmail.com', 'Triple A Sport Management');
 
-        $message->to($to)->subject('Pesanan Anda');
+        $message->to($to)->subject($subject);
 
 
     });

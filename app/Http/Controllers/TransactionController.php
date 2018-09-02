@@ -20,7 +20,7 @@ class TransactionController extends Controller
 
 
 
-    public function mail($code){
+    public function mail($code,$subject){
 
 
 
@@ -88,11 +88,12 @@ $encrypted = base64_encode($output);
 
                 // return view('email.invoice-lunas',['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'barcode'=>$barcode]);
 
-$mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'barcode'=>$barcode,'encrypted'=>$encrypted], function ($message)use(&$to,&$barcode) {
 
-        $message->from('fariswidhiarta123@gmail.com', 'Triple A');
+$mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'barcode'=>$barcode,'encrypted'=>$encrypted], function ($message)use(&$to,&$barcode,&$subject) {
 
-        $message->to($to)->subject('Invoice');
+        $message->from('fariswidhiarta123@gmail.com', 'Triple A Sport Management');
+
+        $message->to($to)->subject($subject);
         // $message->embedData($barcode, 'QrCode.png', 'image/png');
 
 
@@ -143,11 +144,13 @@ if($success==1){
 
                 if ($tagihan->status_bayar!=1) {
                     # code...
-                $this->mail($tagihan->id);
+
 
                 $tagihan->status_bayar = 1;
-                $tagihan->keterangan_bank = '['.$idt.'] Payment Received/Paid For '.$tagihan->event;
+                $tagihan->keterangan_bank = $description;
                 $tagihan->save();
+            $subj = '['.$idt.'] Payment Received/Paid For '.$tagihan->event->nama;
+                $this->mail($tagihan->id,$subj);
 
                 }
     

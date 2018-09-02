@@ -180,7 +180,7 @@ Hello, world.
     <td>Diskon
 {!! !empty($transaction->first()->diskon_data) ? "<span style='background-color:#26A65B;padding:5px;color:#fff'>".$transaction->first()->diskon_data->kode."</span>" :'' !!}
 
-    </td><td  style="text-align: right">{{!empty($transaction->first()->diskon_data) ?($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'Rp. '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</td>
+    </td><td  style="text-align: right">{{!empty($transaction->first()->diskon_data) ?($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'IDR. '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</td>
   </tr>
   <tr>
     <td>Kode Unik</td><td  style="text-align: right">{{$transaction->first()->validasi_no}}</td>
