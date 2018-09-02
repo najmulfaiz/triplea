@@ -512,11 +512,11 @@ $jml_total = $request->total;
 		$userdata = LoginMember::where('id',$transaction->first()->id_login_member)->first();
 
 			$to = $userdata->email;
-$mail=    Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
+ail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
 
-        $message->from('ariswidhiarta123@gmail.com', 'Triple A Sport Management');
+        $message->from('fariswidhiarta123@gmail.com', 'Triple A ');
 
-        $message->to($to)->subject("x");
+        $message->to($to)->subject($subject);
 
 
     });
