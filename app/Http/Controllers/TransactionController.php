@@ -10,6 +10,7 @@ use Mail;
 use App\Transaction;
 use App\DetailTransaction;
 use DNS2D;
+use DNS1D;
 use Crypt;
 use QrCode;
 use App\Lib\Log;
@@ -64,14 +65,16 @@ class TransactionController extends Controller
         // echo $nohp;
 
 $encrypted = base64_encode($output);
-        $barcode= QrCode::encoding('UTF-8')->size(200)->generate($encrypted);
-;
+        // $barcode= QrCode::encoding('UTF-8')->size(200)->generate($encrypted);
+
             $log = new Log;
             $url = url()->current();
             // $ip = $request->ip();
             // $sessid = session('userid');
 
             $log->log("Kirim Invoice Lunas ke  ".$to." | kode = ".$code,null);
+        QrCode::format('png')->size(200)->generate($encrypted, public_path('barcode/'.$encrypted.'.png'));
+
 // echo $barcode;
 // echo $barcode;
 
@@ -89,17 +92,26 @@ $encrypted = base64_encode($output);
                 // return view('email.invoice-lunas',['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'barcode'=>$barcode]);
 
 
-$mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'barcode'=>$barcode,'encrypted'=>$encrypted], function ($message)use(&$to,&$barcode,&$subject) {
+// $barcode= '<img src="data:image/png;base64,'.DNS2D::getBarcodePNG('8451703311075', 'QRCODE',10,10).'"'." alt='barcode'/>";
+// echo '
+//     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFYAAAAeAQMAAACMk3u1AAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABpJREFUGJVj+Hzmz5nzZ/6cP/PZhmGUTTM2AE4EC0BGiy0nAAAAAElFTkSuQmCC alt="barcode"/>';
 
-        $message->from('fariswidhiarta123@gmail.com', 'Triple A Sport Management');
+
+// print_r($barcode);
+
+$mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'encrypted'=>$encrypted], function ($message)use(&$to,&$barcode,&$subject) {
+
+        $message->from('no-reply@tripleasport.com', 'Triple A Sport Management');
 
         $message->to($to)->subject("Testing Subjek");
         // $message->embedData($barcode, 'QrCode.png', 'image/png');
 
 
-        // $message->embedData($barcode, 'QrCode.png', 'image/png');
+        // $message->embedData(QrCode::format('png')->generate('Make me into a QrCode!', ''), 'QrCode.png', 'image/png');
 
     });
+// // echo "string";
+// var_dump($mail);
 
 
     }

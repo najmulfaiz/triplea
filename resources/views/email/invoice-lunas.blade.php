@@ -227,8 +227,8 @@ Terima Kasih Sudah Melakukan Pembayaran,  Anda dapat menujukan Barcode Ini
                         <tr>
                             <td>
                             <center>
-<img src="{!!$message->embedData(QrCode::format('png')->size(200)->generate("x"), 'qr.png', 'image/png')!!}">
-{!!$message->embedData(QrCode::format('png')->size(200)->generate("x"), 'qr.png', 'image/png')!!}
+
+<img src="{{ asset('barcode/'.$encrypted.'.png') }}" alt='barcode'/>
 
 
                             </center>
