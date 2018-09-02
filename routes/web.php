@@ -27,7 +27,7 @@ Route::group(['prefix' => 'api/v1'], function() {
 Route::get('/mutasi', 'TransactionController@test');
 
 Route::get('/mutasi/email/{code}', 'TransactionController@mail');
-// Route::get('/mutasi/json', 'TransactionController@json');
+Route::get('/mutasi/json', 'TransactionController@json');
 
 Route::get('/email/invoice', 'MainController@mail');
 Route::get('/register', 'AuthController@register');
