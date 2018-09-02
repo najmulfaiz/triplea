@@ -68,7 +68,7 @@ $encrypted = base64_encode($output);
 ;
             $log = new Log;
             $url = url()->current();
-            $ip = $request->ip();
+            // $ip = $request->ip();
             // $sessid = session('userid');
 
             $log->log("Kirim Invoice Lunas ke  ".$to." | kode = ".$code,null);
