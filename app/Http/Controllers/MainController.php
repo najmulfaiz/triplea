@@ -512,7 +512,7 @@ $jml_total = $request->total;
 		$userdata = LoginMember::where('id',$transaction->first()->id_login_member)->first();
 
 			$to = $userdata->email;
-ail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
+Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
 
         $message->from('fariswidhiarta123@gmail.com', 'Triple A ');
 
