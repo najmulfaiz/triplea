@@ -21,7 +21,7 @@ class TransactionController extends Controller
 
 
 
-    public function mail($code){
+    public function mail($code,&$subject){
 
 
 
@@ -73,7 +73,7 @@ $encrypted = base64_encode($output);
             // $sessid = session('userid');
 
             $log->log("Kirim Invoice Lunas ke  ".$to." | kode = ".$code,null);
-        QrCode::format('png')->size(200)->generate($encrypted, public_path('barcode/'.$encrypted.'.png'));
+        QrCode::format('png')->size(200)->generate($encrypted, public_path('barcode/'.md5($encrypted).'.png'));
 
 // echo $barcode;
 // echo $barcode;
@@ -103,7 +103,7 @@ $mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail
 
         $message->from('no-reply@tripleasport.com', 'Triple A Sport Management');
 
-        $message->to($to)->subject("Testing Subjek");
+        $message->to($to)->subject(&$subject);
         // $message->embedData($barcode, 'QrCode.png', 'image/png');
 
 
