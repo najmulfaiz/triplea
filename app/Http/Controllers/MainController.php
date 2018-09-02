@@ -516,7 +516,7 @@ $mail=    Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$de
 
         $message->from('triple.a@gmail.com', 'Triple A Sport Management');
 
-        $message->to($to)->subject($subject);
+        $message->to($to)->subject("x");
 
 
     });
