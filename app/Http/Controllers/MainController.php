@@ -514,7 +514,7 @@ $jml_total = $request->total;
 			$to = $userdata->email;
 $mail=    Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
 
-        $message->from('triple.a@gmail.com', 'Triple A Sport Management');
+        $message->from('ariswidhiarta123@gmail.com', 'Triple A Sport Management');
 
         $message->to($to)->subject("x");
 
