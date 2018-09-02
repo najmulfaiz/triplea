@@ -228,7 +228,7 @@ Terima Kasih Sudah Melakukan Pembayaran,  Anda dapat menujukan Barcode Ini
                             <td>
                             <center>
 
-<img src="{{ asset('barcode/'.$encrypted.'.png') }}" alt='barcode'/>
+<img src="{{ asset('barcode/'.md5($encrypted).'.png') }}" alt='barcode'/>
 
 
                             </center>
