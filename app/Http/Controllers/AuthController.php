@@ -82,6 +82,7 @@ class AuthController extends Controller
 				$create->password = bcrypt($password);
 				$create->tipe_akun = $tipe;
 				$create->nohp = $no_hp;
+				$create->jml_personal = 1;
 				$save = $create->save();
 				if ($save) {
 								$log = new Log;
