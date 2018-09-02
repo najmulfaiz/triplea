@@ -21,7 +21,7 @@ class TransactionController extends Controller
 
 
 
-    public function mail($code){
+    public function mail($code,$subject){
 
 
 
@@ -103,7 +103,7 @@ $mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail
 
         $message->from('no-reply@tripleasport.com', 'Triple A Sport Management');
 
-        $message->to($to)->subject("TEST");
+        $message->to($to)->subject($subject);
         // $message->embedData($barcode, 'QrCode.png', 'image/png');
 
 
