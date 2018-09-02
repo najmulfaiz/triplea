@@ -179,7 +179,7 @@
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Diskon
 
 {!! !empty($transaction->first()->diskon_data) ? "<span style='background-color:#26A65B;padding:5px;color:#fff'>".$transaction->first()->diskon_data->kode."</span>" :'' !!}
-    </td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{!empty($transaction->first()->diskon_data) ? ($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'Rp. '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</b></td>
+    </td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{!empty($transaction->first()->diskon_data) ? ($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'IDR '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</b></td>
   </tr>
   <tr>
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Kode Unik</td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{$transaction->first()->validasi_no}}</b></td>
