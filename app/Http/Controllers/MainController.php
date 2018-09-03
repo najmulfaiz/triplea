@@ -111,6 +111,17 @@ class MainController extends Controller
 
 	}
 
+	public function umur($tanggal_lahir){
+
+    list($year,$month,$day) = explode("-",$tanggal_lahir);
+    $year_diff  = date("Y") - $year;
+    $month_diff = date("m") - $month;
+    $day_diff   = date("d") - $day;
+    if ($month_diff < 0) $year_diff--;
+        elseif (($month_diff==0) && ($day_diff < 0)) $year_diff--;
+    return $year_diff;
+	}
+
 	public function saveIdKategori(Request $request){
 
 	$this->middleware('login-auth');
@@ -140,7 +151,7 @@ class MainController extends Controller
 
 		if ($nationality == 1) {
 			# code...
-			if ($personal->nationality == $nationality) {
+			if ($personal->nasionality == $nationality) {
 				# code...
 				// $response = [
 				// 'success'=>true
@@ -165,33 +176,31 @@ class MainController extends Controller
 			$success = true;
 							$message = "ok";
 		}
-
 		if ($success==true) {
 			# code...
-
-			if (empty($personal->foto_ktp)) {
-				# code...
-
-				$message = "Silahkan Isi Profil Anda Terlebih Dahulu di Halaman Dashboard";
-				$success = false;
-			}
-			else{
 			$ktp = $personal->foto_ktp;
 			$medical = $personal->medical;
 
 			// print_r($medical);
-
+			// print_r($medical);
 			if (is_null($ktp) || empty($medical->nama)) {
 				$message = "KTP / Medical Belum diisi,Silahkan Cek Lagi Data";
 				$success = false;
 			}
 			else{
-				$success = true;
+				$umur = $this->umur($personal->tgl_lahir);
+				$max = 10;
+				if ($umur>$max) {
+				$success = false;
+						$message = "Usia Tidak Boleh Lebih dari ".$max." Tahun ";
+				}
+				else{
+									$success = false;
 								$message = "ok";
-			}
-
+				}
 			}
 		}
+
 
 
 		if ($success==true) {
@@ -203,6 +212,7 @@ class MainController extends Controller
 
 		$request->session()->flash('danger',$message);
 		return redirect()->back();
+		// echo $message;
 
 		}
 		// $response = [
@@ -291,12 +301,14 @@ $user = LoginMember::find(session('userid'));
 		// $kota = Kota::all();
 		// $negara = Negara::all();
 
-		$emergency = EmergencyMedical::where('id_personal_detail',$personal->first()->id);
+		$emergency = EmergencyMedical::where('id_personal_detail',$personal->id);
 
  // echo $personal->first();
 		// return view('personal/detail',compact('personal','kota','negara','id','emergency'));
 
 // print_r($request->session()->all());
+		// echo $personal->first()->id;
+		// echo $personal;
 		return view('/checkout',compact('group','personal','kategori','kategori_id','jersey','id','user','emergency','eventid',''));			
 		}
 
@@ -514,7 +526,7 @@ $jml_total = $request->total;
 			$to = $userdata->email;
 Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
 
-        $message->from('no-reply@tripleasporty.com', 'Triple A ');
+        $message->from('no-reply@tripleasport.com', 'Triple A Sport Management');
 
         $message->to($to)->subject($subject);
 

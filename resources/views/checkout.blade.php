@@ -305,15 +305,17 @@
     <div class="col-lg-6">
       <div class="form-group">
         <label>Nama</label><br>
-        {{$emergency->count() > 0 ? $emergency->first()->nama:''}}
+
+{{--         {{$emergency->first()}} --}}
+        {{count($emergency) > 0 ? ($emergency->first()->nama==null ? '-':$emergency->first()->nama):'-'}}
       </div>
       <div class="form-group">
         <label>Nomor HP</label><br>
-{{$emergency->count() > 0 ? $emergency->first()->nohp:''}}
+{{count($emergency) > 0 ? ($emergency->first()->nohp == null ? '-':$emergency->first()->nohp):'-'}}
       </div>
       <div class="form-group">
         <label>Kondisi Kesehatan</label><br>
-{{$emergency->count() > 0 ? $emergency->first()->kondisi_kesehatan:''}}
+{{count($emergency) > 0 ? ($emergency->first()->kondisi_kesehatan == null ? '-':$emergency->first()->kondisi_kesehatan):'-'}}
       </div>
 
     </div>
