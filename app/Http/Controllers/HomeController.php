@@ -147,6 +147,8 @@ class HomeController extends Controller
 		$personal->nama_akhir = $nama_akhir;
 		$personal->jk = $kelamin;
 			if (!empty($file)) {	
+				
+		$ext = $file->getClientOriginalExtension();
 			$file->move(public_path('uploads'),time().session('userid').'.'.$ext);
 			$personal->foto_ktp = time().session('userid').'.'.$ext;
 
