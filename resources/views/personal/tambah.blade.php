@@ -91,7 +91,7 @@ Maksimal Ukuran Gambar 200KB
   </div>
   <div class="form-group">
     <label>Negara Tempat Tinggal</label>
-    <select class="form-control" name="tempat_tinggal" required=""> 
+    <select class="form-control" name="tempat_tinggal" required="" id="negara-tempat"> 
       
   <option value="">Pilih Tempat Tinggal</option>
       @foreach ($negara as $n)
@@ -101,7 +101,7 @@ Maksimal Ukuran Gambar 200KB
     </select>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" id="provinsi-data" >
   <label>Provinsi</label><br>
 
   <select class="form-control select2" name="provinsi" id="provinsi">
@@ -109,7 +109,7 @@ Maksimal Ukuran Gambar 200KB
   </select>
     
   </div>
-  <div class="form-group">
+  <div class="form-group" id="kota-data" >
     <label>Kota</label>
     <br>
     <select class="form-control select2" name="kota" id="kota">

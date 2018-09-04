@@ -91,8 +91,8 @@ Maksimal Ukuran Gambar 200KB
   </select>
   </div>
   <div class="form-group">
-    <label>Tempat Tinggal</label>
-    <select class="form-control" name="tempat_tinggal" required=""> 
+    <label>Tempat Tinggal</label> 
+    <select class="form-control negara-tempat" name="tempat_tinggal" required="" id="negara-tempat"> 
       
   <option value="">Pilih Tempat Tinggal</option>
       @foreach ($negara as $n)
@@ -102,14 +102,14 @@ Maksimal Ukuran Gambar 200KB
     </select>
   </div>
 
-  <div class="form-group">
+  <div class="form-group provinsi-data" id="provinsi-data"  style="{!!$personal->residence!='1'? "display:none":"";!!}">
   <label>Provinsi</label>
   <select class="form-control select2" name="provinsi" id="provinsi" data-value="{{$personal->id_provinsi}}">
     
   </select>
     
   </div>
-  <div class="form-group">
+  <div class="form-group kota-data" id="kota-data"  style="{!!$personal->residence!='1'? "display:none":"";!!}">
     <label>Kota</label>
     <select class="form-control select2" name="kota" id="kota" data-value="{{$personal->id_kota}}">
       <option value="">Pilih Provinsi Terlebih Dahulu</option>

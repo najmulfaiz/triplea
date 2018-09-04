@@ -208,9 +208,9 @@ Maksimal Ukuran Gambar 200KB
       @endforeach
   </select>
   </div>
-  <div class="form-group">
+  <div class="form-group" >
     <label>Negara Tempat Tinggal</label>
-    <select class="form-control" name="tempat_tinggal" required=""> 
+    <select class="form-control" name="tempat_tinggal" required="" id="negara-tempat" data-value="{{!is_null($personal)?$personal->residence:''}}> 
       
   <option value="">Pilih Tempat Tinggal</option>
       @foreach ($negara as $n)
@@ -219,19 +219,22 @@ Maksimal Ukuran Gambar 200KB
       @endforeach
     </select>
   </div>
-  <div class="form-group">
+    {{-- expr --}}
+
+  <div class="form-group" id="provinsi-data" style="{!!$personal->residence!='1'? "display:none":"";!!}">
   <label>Provinsi</label>
   <select class="form-control select2" name="provinsi" id="provinsi" data-value="{{!is_null($personal)?$personal->id_provinsi:''}}">
     
   </select>
     
   </div>
-  <div class="form-group">
+  <div class="form-group" id="kota-data" style="{!!$personal->residence!='1'? "display:none":"";!!}">
     <label>Kota</label>
     <select class="form-control select2" name="kota" id="kota" data-value="{{!is_null($personal)?$personal->id_kota:''}}">
       <option value="">Pilih Provinsi Terlebih Dahulu</option>
     </select>
   </div>
+
 
 </div>
   
@@ -333,7 +336,35 @@ Maksimal Ukuran Gambar 200KB
 
   });
   }
+
   select2();
+  $(document).on('change','#negara-tempat',function(){
+    var val = $(this).val();
+    if(val !='1'){
+      $("#provinsi-data").hide();
+      $("#kota-data").hide();
+    }
+    else{
+
+      $("#provinsi-data").show();
+      $("#kota-data").show();
+
+    }
+  });
+
+  $(document).on('change','.negara-tempat',function(){
+    var val = $(this).val();
+    if(val !='1'){
+      $(".provinsi-data").hide();
+      $(".kota-data").hide();
+    }
+    else{
+
+      $(".provinsi-data").show();
+      $(".kota-data").show();
+
+    }
+  });
 cariAlamat('index');
 function cariAlamat(ref){
     $.ajax({
