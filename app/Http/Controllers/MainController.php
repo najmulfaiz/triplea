@@ -189,13 +189,19 @@ class MainController extends Controller
 			}
 			else{
 				$umur = $this->umur($personal->tgl_lahir);
-				$max = 10;
+				$max = $kategori->usia_max;
+				$min = $kategori->usia_min;
 				if ($umur>$max) {
 				$success = false;
 						$message = "Usia Tidak Boleh Lebih dari ".$max." Tahun ";
 				}
+				elseif ($umur < $min) {
+
+				$success = false;
+						$message = "Usia Tidak Boleh Kurang dari ".$min." Tahun ";
+				}
 				else{
-									$success = false;
+									$success = true;
 								$message = "ok";
 				}
 			}

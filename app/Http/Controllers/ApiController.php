@@ -43,6 +43,7 @@ class ApiController extends Controller
 
 		$personal = PersonalDetail::find($pid);
 		$group = Group::find($id);
+		$kategori = Kategori::where('id_group',$group->id)->first();
 
 		$id_nationality = $group->nationality;
 		$nasionality = $personal->nasionality;
@@ -90,15 +91,21 @@ class ApiController extends Controller
 			}
 			else{
 				$umur = $this->umur($personal->tgl_lahir);
-				$max = 10;
+				$max = $kategori->usia_max;
+				$min = $kategori->usia_min;
 				if ($umur>$max) {
 				$success = false;
 						$message = "Usia Tidak Boleh Lebih dari ".$max." Tahun ";
 				}
+				elseif ($umur < $min) {
+
+				$success = false;
+						$message = "Usia Tidak Boleh Kurang dari ".$min." Tahun ";
+				}
 				else{
 									$success = true;
-								$message = "ok".$umur.$max;
-				}
+								$message = "ok";
+				}	
 			}
 		}
 

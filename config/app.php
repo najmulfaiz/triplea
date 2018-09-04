@@ -179,6 +179,8 @@ return [
             Milon\Barcode\BarcodeServiceProvider::class,
             SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
     Chocoholics\LaravelElasticEmail\MailServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
 
 
     ],
@@ -232,7 +234,9 @@ return [
 
     'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
     'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
- 'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+ 'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+ 'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+
     ],
 
 ];

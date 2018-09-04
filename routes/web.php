@@ -65,6 +65,15 @@ Route::get('/trx/{id}', 'MainController@trx');
 Route::get('/partisipan/tambah/{id}', 'MainController@tambahPartisipan');
 Route::get('/invoice/{id}', 'MainController@invoice');
 Route::post('/partisipan/{id}', 'HomeController@hapusPartisipan');
+Route::group(['prefix' => 'admin'], function() {
+    //
+// 	Route::get('/admin/index', 'AdminController@index');
+// Route::get('admin/index/data', 'AdminController@data');
+
+Route::resource('event', 'EventController');
+Route::post('event/create','EventController@store');
+
+});
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // });
