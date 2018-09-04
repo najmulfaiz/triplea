@@ -26,13 +26,15 @@ class VerifyController extends Controller
 			else{
 				if ($user->status == 0) {
 			$user->status = 1;
-			$user->save();				
-						$request->session()->flash('success','Email Berhasil diaktifkan');
 			if (session('userid') == null) {
 
 			return redirect('/login');
 			}
 			else{
+
+				
+			$user->save();				
+						$request->session()->flash('success','Email Berhasil diaktifkan');
 					return redirect('dashboard');
 			}
 				}
