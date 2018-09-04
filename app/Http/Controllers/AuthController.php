@@ -264,7 +264,7 @@ public function logout(Request $request){
 
 $mail=    Mail::send('email.verify', ['token'=>$token_str,'email'=>$to], function ($message)use(&$to) {
 
-        $message->from('mail@m.com', 'Verifikasi Akun');
+        $message->from('no-reply@tripleasport.com', 'Verifikasi Akun');
 
         $message->to($to)->subject('Verifikasi Akun');
 

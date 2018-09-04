@@ -26,12 +26,24 @@ use DNS2D;
 use QrCode;
 class ApiController extends Controller
 {
+
+	public function umur($tanggal_lahir){
+
+    list($year,$month,$day) = explode("-",$tanggal_lahir);
+    $year_diff  = date("Y") - $year;
+    $month_diff = date("m") - $month;
+    $day_diff   = date("d") - $day;
+    if ($month_diff < 0) $year_diff--;
+        elseif (($month_diff==0) && ($day_diff < 0)) $year_diff--;
+    return $year_diff;
+	}
 	public function cekPartisipan(Request $request){
 		$id = $request->id;
 		$pid = $request->pid;
 
 		$personal = PersonalDetail::find($pid);
 		$group = Group::find($id);
+		$kategori = Kategori::where('id_group',$group->id)->first();
 
 		$id_nationality = $group->nationality;
 		$nasionality = $personal->nasionality;
@@ -78,8 +90,22 @@ class ApiController extends Controller
 				$success = false;
 			}
 			else{
-				$success = true;
+				$umur = $this->umur($personal->tgl_lahir);
+				$max = $kategori->usia_max;
+				$min = $kategori->usia_min;
+				if ($umur>$max) {
+				$success = false;
+						$message = "Usia Tidak Boleh Lebih dari ".$max." Tahun ";
+				}
+				elseif ($umur < $min) {
+
+				$success = false;
+						$message = "Usia Tidak Boleh Kurang dari ".$min." Tahun ";
+				}
+				else{
+									$success = true;
 								$message = "ok";
+				}	
 			}
 		}
 

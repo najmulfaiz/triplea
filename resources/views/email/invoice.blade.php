@@ -131,7 +131,7 @@
                     <tr>
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight: bold;" width="40%">Partisipan</td>
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight:bold" width="60%">Kategori</td>
-                                <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight:bold" width="60%">Harga</td>
+                                <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight:bold" width="60%">Harga (IDR)</td>
                             </tr>
                 </thead>
                     <tbody>
@@ -149,7 +149,7 @@
 </tr>
 @endforeach
 <tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #ccc;" width="40%">
-  <td></td><td></td><td style="text-align: right;"><b>IDR {{number_format($total,2,',','.')}}</b></td>
+  <td></td><td></td><td style="text-align: right;"><b> {{number_format($total,2,',','.')}}</b></td>
 </tr>
 @endif
 
@@ -169,23 +169,20 @@
 
 
 
-<tr>
-  <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0"><center>Deskripsi</center></td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><center>Harga</center></td>
-</tr>
   <tr>
-    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">  Subtotal</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"> <b>IDR {{number_format($total,2,',','.')}}</b></td>
+    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">  Subtotal</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"> <b> IDR {{number_format($total,2,',','.')}}</b></td>
   </tr>
   <tr>
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Diskon
 
 {!! !empty($transaction->first()->diskon_data) ? "<span style='background-color:#26A65B;padding:5px;color:#fff'>".$transaction->first()->diskon_data->kode."</span>" :'' !!}
-    </td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{!empty($transaction->first()->diskon_data) ? ($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'IDR '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</b></td>
+    </td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{!empty($transaction->first()->diskon_data) ? ($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':' IDR '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ' - '}}</b></td>
   </tr>
   <tr>
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Kode Unik</td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{$transaction->first()->validasi_no}}</b></td>
   </tr>
   <tr style="background: #ccc;">
-    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Harga Akhir</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>IDR <b>{{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></b></td>
+    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Harga Akhir</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b> <b>IDR {{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></b></td>
   </tr>
 
 {{--                             <tr>
@@ -338,7 +335,7 @@ a/n TIYAS HENDRA SAPUTRA</center>
                     </tr>
                     <tr>
                         <td width="560" align="center" style="padding:10px 20px 30px">
-                    &copy; {{date('Y')}} Triple A
+                    &copy; {{date('Y')}} Triple A Sport Management
                         </td>
                     </tr>
                 </tbody></table>

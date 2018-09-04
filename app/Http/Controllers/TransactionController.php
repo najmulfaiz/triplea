@@ -161,7 +161,7 @@ if($success==1){
                 $tagihan->status_bayar = 1;
                 $tagihan->keterangan_bank = $description;
                 $tagihan->save();
-            $subj = '['.$idt.'] Payment Received/Paid For '.$tagihan->event->nama;
+                $subj = '['.$idt.'] Payment Received/Paid For '.$tagihan->event->nama;
                 $this->mail($tagihan->id,$subj);
 
                 }

@@ -148,7 +148,7 @@ Hello, world.
 <tr>
   <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Partisipan</center></td>
   <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Kategori</center></td>
-  <td  style="background-color: #1abc9c;color: #fff; height: 50px"><center>Harga</center></td>
+  <td  style="background-color: #1abc9c;color: #fff; height: 50px"><center>Harga (IDR)</center></td>
 </tr>
 
 @if ($dt->count()>0)
@@ -162,7 +162,7 @@ Hello, world.
 </tr>
 @endforeach
 <tr style="background: #eee">
-  <td></td><td></td><td style="text-align: right;"><b>IDR {{number_format($total,2,',','.')}}</b></td>
+  <td></td><td></td><td style="text-align: right;"><b> {{number_format($total,2,',','.')}}</b></td>
 </tr>
 @endif
 
@@ -186,7 +186,7 @@ Hello, world.
     <td>Kode Unik</td><td  style="text-align: right">{{$transaction->first()->validasi_no}}</td>
   </tr>
   <tr style="background: #ccc;">
-    <td>Harga Akhir</td><td style="text-align: right"><b>IDR {{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></td>
+    <td>Harga Akhir</td><td style="text-align: right"><b>{{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></td>
   </tr>
 </table>
 <br><br>
