@@ -114,8 +114,8 @@ table{
     <address>{{$detail->formParticipant->personalDetail->alamat}}</address><br>
 </div>
 <div class="col-lg-4" style="width: 33.3%;float: left;">
-  <b>Bayar Kepda</b><br>
-  PT Triple A
+  <b>Bayar Kepada</b><br>
+  TripleASport
 </div>
         </div>
 <div class="card" style="width: 100%;">
