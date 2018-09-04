@@ -221,14 +221,14 @@ Maksimal Ukuran Gambar 200KB
   </div>
     {{-- expr --}}
 
-  <div class="form-group" id="provinsi-data" style="{!!$personal->residence!='1'? "display:none":"";!!}">
+  <div class="form-group" id="provinsi-data" style="{!!$personal!=null?($personal->residence!='1'? "display:none":""):'';!!}">
   <label>Provinsi</label>
   <select class="form-control select2" name="provinsi" id="provinsi" data-value="{{!is_null($personal)?$personal->id_provinsi:''}}">
     
   </select>
     
   </div>
-  <div class="form-group" id="kota-data" style="{!!$personal->residence!='1'? "display:none":"";!!}">
+  <div class="form-group" id="kota-data" style="{!!$personal!=null?($personal->residence!='1'? "display:none":""):'';!!}">
     <label>Kota</label>
     <select class="form-control select2" name="kota" id="kota" data-value="{{!is_null($personal)?$personal->id_kota:''}}">
       <option value="">Pilih Provinsi Terlebih Dahulu</option>
