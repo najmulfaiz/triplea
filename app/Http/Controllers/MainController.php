@@ -672,10 +672,16 @@ Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=
 
 	public function profile(){
 
-	$this->middleware('login-auth');
-		$userid = session('userid');
+		// $this->middleware('login-auth');
+		if(empty(session('userid'))){
+			return redirect('/login');
+		}
+		else{
+			$userid = session('userid');
 		$user = LoginMember::where('id',$userid)->first();
 		return view('profile',compact('user'));
+		}
+	
 	}
 
 	public function profileUpdate(Request $request){
@@ -803,10 +809,16 @@ Mail::send('email.invoice', ['transaction'=>$transaction,'detail'=>$detail,'dt'=
 
 	public function daftarTransaksi(){
 
-	$this->middleware('login-auth');
+	// $this->middleware('login-auth');
+		if(empty(session('userid'))){
+			return redirect('/login');
+		}
+		else{
+
 		$userid = session('userid');
 		$transaksi = Transaction::where('id_login_member',$userid)->orderBy('tgl_transaksi','desc')->get();
-		return view('list-transaksi',compact('transaksi'));
+		return view('list-transaksi',compact('transaksi'));	
+		}
 	}
 	public function provinsi(Request $request){
 

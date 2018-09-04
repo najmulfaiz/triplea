@@ -48,7 +48,7 @@ class VerifyController extends Controller
 		}
 		else{
 			$request->session()->flash('danger','Kode Verifikasi Salah');
-			return redirect('verify/'.$token);
+			return redirect('/login');;
 		}
 		return view('verify/email');
 	}
