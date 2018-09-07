@@ -63,7 +63,7 @@
 </div>
 <div class="form-group">
     <label>Kota</label>
-    <select class="form-control" name="kota">
+    <select class="form-control select2" name="kota">
     @foreach ($kota as $k)
         {{-- expr --}}
         <option value="{{$k->id}}">{{$k->nama}}</option>
@@ -578,7 +578,7 @@ function nextTab(elem) {
         tr += "<td><button class='btn btn-danger delete-row' data-id='"+math+"'>Hapus</button></td>";
         tr += "</tr>";
 
-var          input = "<input class='"+math+"' type='hidden' value='"+nama_kategori+"' name='nama_kategori[]'>";
+var          input = "<input class='"+math+"' type='hidden' value='"+nama_kategori+'-'+kategori_grup_val+"' name='nama_kategori[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+kategori_grup_val+"' name='kategori_group[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+harga+"' name='harga_kategori[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+usia_min+"' name='usia_min[]'>";
@@ -602,6 +602,10 @@ var          input = "<input class='"+math+"' type='hidden' value='"+nama_katego
         $(".tr-"+id).remove();
 
     })
+
+    $(document).ready(function(){
+      $(".select2").select2();
+    });
 </script>
     {{-- expr --}}
 @endpush

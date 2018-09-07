@@ -21,7 +21,7 @@ class VerifyController extends Controller
 				# code...
 				// echo "string";
 			$request->session()->flash('danger','User Tidak Ditemukan');
-			return redirect('login/');
+			return redirect('login/');								
 			}
 			else{
 				if ($user->status == 0) {
@@ -32,7 +32,7 @@ class VerifyController extends Controller
 			}
 			else{
 
-				
+
 			$user->save();				
 						$request->session()->flash('success','Email Berhasil diaktifkan');
 					return redirect('dashboard');
