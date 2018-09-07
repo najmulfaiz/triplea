@@ -307,7 +307,8 @@
     })
   );
   $(document).on('change','#partisipan',function(){
-    var id = $("#partisipan option:selected").attr('data-id');
+    var id = $("#kategori option:selected").attr('value');
+    if(id.length!=0){
     var pid = $(this).val();
 
     $.ajax({
@@ -326,11 +327,14 @@
         }
         else{
 
+          $(".choose").removeAttr('disabled');
           $(".kategori-data").removeAttr('data-continue');
         }
 
       }
     })
+
+    }
     // alert(id+'x'+pid);
   });
     $(document).on('change','#kategori',function(){
@@ -342,7 +346,10 @@
         method: "GET",
         success: function(res){
           // console.log(res);
+          console.log(res);
           $(".harga").text(res.harga);
+          $("#kategori option").attr('data-price',res.harga);
+          $("#pilih").text(rupiah(res.harga));
           // $("#total").val(res.harga);
 
   // total();
@@ -550,20 +557,11 @@
       }
       else{
         // $("#pilih").show();
-if (continu=='false') {
-
-          alert("Event Hanya Diperuntukan Oleh Warga Indonesia");
-        choose.attr('disabled','disabled');
-      $("#pilih").text("Pilih");
 
 
-}
-else{
-      
-
-      $("#pilih").text(" "+rupiah(parseInt(price)));
+      // $("#pilih").text(" "+rupiah(parseInt(price)));
         choose.removeAttr('disabled');
-}
+
       }
       
 

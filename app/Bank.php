@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LoginMember extends Model
+class Bank extends Model
 {
     //
-	protected $table = 'login_member';
+	protected $table = 'bank';
 	public $timestamps = false;
-	protected $hidden = ['password'];
 
 }

@@ -216,11 +216,12 @@ Lakukan Pembayaran dengan melakukan transfer dana <b>(wajib dengan 3 digit kode 
                             <center>
 <img src="https://ci5.googleusercontent.com/proxy/ANXKMuH8CX9M_usb4Mhmv59kEBLublJ52uIvi7ZJoniQXDwnI4egXC_IXj4q7Z0CQ9aqoRD-ZyFT-_4c=s0-d-e1-ft#http://event.arayamedia.id/img/bca.png">
 <br>
-<b>Bank BCA</b>
+<b>{{$rekening->bank->nama_bank}}</b>
 <br>
-3310421111 <br>
+{{$rekening->no_rekening}} <br>
 <br>
-a/n TIYAS HENDRA SAPUTRA</center>
+{{$rekening->nama_pemilik}}
+</center>
 <br>
 <br><br>
 

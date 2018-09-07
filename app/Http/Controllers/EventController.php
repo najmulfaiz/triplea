@@ -27,7 +27,8 @@ use DNS1D;
 use App\EventTerm;
 use DNS2D;
 use QrCode;
-
+use App\Rekening;
+use App\Bank;
 use Yajra\Datatables\Datatables;
 
 
@@ -45,10 +46,10 @@ public function data(Request $request){
   $crud = Event::get();
             return Datatables::of($crud)->addColumn('action',function($data)use(&$request){
                 $html ='';
-                $html .= '<a  href='.url($request->segment(1).'/event/'.$data->id.'/edit').' class="btn btn-success btn-sm btn-modal" data-title="Edit Data" data-toggle="modal" data-target="#modal" data-button="Update"><i class="fas fa-pencil"></i></a> ';
+                $html .= '<a  href='.url($request->segment(1).'/event/'.$data->id.'/edit').' class="btn btn-success btn-sm btn-modal" ><i class="fa fa-info"></i></a> ';
                 // $html .= csrf_field();
                 // $html .= method_field("DELETE");
-                $html .= '<button data-url="'.url('crud/'.$data->id).'" class="btn btn-delete btn-danger btn-sm"><i class="fas fa-trash"></i>';
+                $html .= '<button data-url="'.url('crud/'.$data->id).'" class="btn btn-delete btn-danger btn-sm"><i class="fa fa-trash"></i>';
                 return $html;
             })
             ->make(true);
@@ -59,7 +60,9 @@ public function data(Request $request){
 
 public function create(){
     $kota =  Kota::all();
-    return view($this->folder.'/create',compact('kota'));
+    $rekening = Rekening::all();
+    $bank = Bank::all();
+    return view($this->folder.'/create',compact('kota','rekening','bank'));
 }
 
 public function store(Request $request){
@@ -69,6 +72,9 @@ public function store(Request $request){
     $tgl = $request->tanggal;
     $kota = $request->kota;
     $logo = $request->file('logo');
+    $bank   = $request->bank;
+    $nama_pemilik = $request->nama_pemilik;
+    $no_rekening = $request->no_rekening;
 
     $event = new Event;
     $event->nama = $nama_event;
@@ -77,19 +83,29 @@ public function store(Request $request){
     if (!empty($logo)) {
 
             $ext = $logo->getClientOriginalExtension();
-            $logo->move(public_path('event'),time().session('userid').'.'.$ext);
             $encevent = md5(session('userid').$nama_event);
-            $event->logo = time().$nama_event.session('userid').'.'.$ext;
+            $logo->move(public_path('event'),$encevent.'.'.$ext);
+            $event->logo = $encevent.'.'.$ext;
 
     }
     $event->save();
+
+
+
+    // Rekening
+    $eventid= $event->id;
+    $Rekening = new Rekening;
+    $Rekening->kode_bank = $bank;
+    $Rekening->nama_pemilik = $nama_pemilik;
+    $Rekening->no_rekening = $no_rekening;
+    $Rekening->id_event = $eventid;
 
 
     // Event Detail 
     $status_registrasi = $request->status_registrasi;
     $deskripsi_event_detail = $request->deskripsi_event_detail;
     // echo $deskripsi;
-    $eventid= $event->id;
+
 
     $eventDetail = new EventDetail;
     $eventDetail->id_event = $eventid;
@@ -105,7 +121,7 @@ public function store(Request $request){
     $evenTerm->save();
 
     // Fasilitas
-    $fasilitas = $request->fasilitas;
+    $fasilitas = $request->Fasilitas;
     $eventFasilitas = new Fasilitas;
     $eventFasilitas->deskripsi = $fasilitas;
     $eventFasilitas->id_event = $event->id;
@@ -114,11 +130,13 @@ public function store(Request $request){
     $nama_grup = $request->nama_grup;
     $status_grup = $request->status_grup;
     $lokasi_grup = $request->lokasi_grup;
+    $kuota = $request->kuota;
     for ($i=0; $i < count($nama_grup) ; $i++) { 
         # code...
         $nama_grup_i= $nama_grup[$i];
         $status_grup_i= $status_grup[$i];
         $lokasi_grup_i= $lokasi_grup[$i];
+        $kuota_i= $kuota[$i];
 
         // echo $nama_grup_i."<br>";   
         $nm = explode('-',$nama_grup_i);
@@ -133,6 +151,7 @@ public function store(Request $request){
         $grup->status = $status_grup_i;
         $grup->nationality = $lokasi_grup_i;
         $grup->flag =  $end;
+        $grup->kuota =  $kuota_i;
         $grup->save();
         // echo $end;
 
@@ -146,7 +165,8 @@ public function store(Request $request){
     $harga_kategori = $request->harga_kategori;
     $usia_min = $request->usia_min;
     $usia_max = $request->usia_max;
-    $kuota = $request->kuota;
+    $kuota_kategori  = $request->kuota_kategori;
+    // $kuota = $request->kuota;
     $deskripsi = $request->deskripsi;
 
     for ($i=0; $i < count($nama_kategori) ; $i++) { 
@@ -156,7 +176,8 @@ public function store(Request $request){
     $harga_kategori_i = $harga_kategori[$i];
     $usia_min_i = $usia_min[$i];
     $usia_max_i = $usia_max[$i];
-    $kuota_i = $kuota[$i];
+    $kuota_kategori_i = $kuota_kategori[$i];
+    // $kuota_i = $kuota[$i];
     $deskripsi_i = $deskripsi[$i];
 
 
@@ -176,7 +197,7 @@ public function store(Request $request){
     $kategori->usia_min = $usia_min_i;
     $kategori->usia_max = $usia_max_i;
     $kategori->deskripsi = $deskripsi_i;
-    $kategori->kuota = $kuota_i;
+/*    $kategori->kuota = $kuota_i;*/
     $kategori->save();
     // $kategori
 
@@ -190,6 +211,28 @@ public function store(Request $request){
     // print_r($request->all());
     $request->session()->flash('success','Berhasil Menambah Data');
 return redirect('admin/event');
+}
+
+public function edit($id){
+
+    $kota =  Kota::all();
+    $rekening = Rekening::all();
+    $bank = Bank::all();
+
+    $event = Event::find($id);
+    $eventDetail = EventDetail::where('id_event',$id);
+    $eventTerm = EventTerm::where('id_event',$id);
+    $fasilitas = Fasilitas::where('id_event',$id);
+    $group = Group::where('id_event',$id);
+    // $kategori = 
+
+    // var_dump($eventTerm);
+
+// echo $eventDetail->first();
+    // echo "string";
+    // echo $evenTerm->get();
+    return view($this->folder.'/edit',compact('kota','rekening','bank','eventDetail','eventTerm','fasilitas','group','event'));
+    // echo $evenTerm->first();
 }
 
 

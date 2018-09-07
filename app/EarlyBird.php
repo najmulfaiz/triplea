@@ -4,11 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LoginMember extends Model
+class EarlyBird extends Model
 {
     //
-	protected $table = 'login_member';
+	protected $table = 'early_bird';
 	public $timestamps = false;
-	protected $hidden = ['password'];
-
 }

@@ -35,31 +35,30 @@
 {{csrf_field()}}
 <table class="table table-bordered">
   <tr>
-    <td>Event</td><td>{{$kategori->first()->group->event->nama}}</td>
+    <td>Event</td><td>{{$event->nama}}</td>
   </tr>
   <tr>
-    <td>Kota Penyelenggara</td><td>{{$kategori->first()->group->event->kota->nama}}</td>
+    <td>Kota Penyelenggara</td><td>{{$event->kota->nama}}</td>
   </tr>
   <tr>
+
+
     <td>Kategori</td><td><select class="form-control" id="kategori" name="kategori">
       <option value="">Pilih Kategori</option>
-      @foreach ($group->get() as $g)
-        {{-- expr --}}
-        @if($g->kategori!=null)
-        <option {{$g->id==$kategori_id?'selected':''}} value="{{$g->id}}">{{$g->kategori['nama']}}</option>
-        @endif
+      @foreach ($kategori->get() as $k)
+      <option value="{{$k->id}}">{{$k->nama}}</option>
       @endforeach
     </select></td>
   </tr>
   <tr>
-    <td>Harga</td><td class="harga">{{number_format($kategori->first()->harga,2,',','.')}}</td>
+    <td>Harga</td><td class="harga">{{number_format($harga,2,',','.')}}</td>
   </tr>
       <input type="hidden" id="eventid" name="eventid" value="{{$eventid}}">
-  <input type="hidden" name="total" id="total" value="{{$kategori->first()->harga}}">
+  <input type="hidden" name="total" id="total" value="{{$harga}}">
 
-<input type="hidden" name="jumlah_total" id="input-jumlah-total" value="{{$kategori->first()->harga}}">
+<input type="hidden" name="jumlah_total" id="input-jumlah-total" value="{{$harga}}">
 <input type="hidden" name="diskon" id="input-diskon" value="0">
-<input type="hidden" name="" id="harga_total" value="{{$kategori->first()->harga}}">
+<input type="hidden" name="" id="harga_total" value="{{$harga}}">
 <input type="hidden" name="diskon" value="" id="diskon_id">
 <input type="hidden" name="" id="diskon_type">
 <input type="hidden" name="id_diskon" id="id_diskon">
@@ -143,7 +142,7 @@
 
 <div class="form-group">
   <label>Harga</label>
-  <h3>    Rp. <span id="harga-total">{{number_format($kategori->first()->harga,0,',','.')}}</span></h3>
+  <h3>    Rp. <span id="harga-total">{{number_format($harga,0,',','.')}}</span></h3>
 </div>
 
 <div class="form-group">
@@ -159,7 +158,8 @@
 <div class="form-group">
   <label>Jumlah Total</label>
   <div class="alert alert-success">
-  <h3 >    Rp. <span id="jumlah-total">{{number_format($kategori->first()->harga,0,',','.')}}</span></h3>
+{{--       <h3 >    Rp. <span id="jumlah-total">{{number_format($kategori->first()->harga,0,',','.')}}</span></h3> --}}
+  <h3 >    Rp. <span id="jumlah-total">{{number_format($harga,0,',','.')}}</span></h3>
   </div>
 </div>
 
@@ -271,24 +271,33 @@
 <div class="col-lg-6">
   <div class="form-group">
     <label>Nomor HP</label><br>
+
 {{$personal==null ? '' : $personal->nohp}}
   </div>
   <div class="form-group">
     <label>Alamat</label><br>
 {{$personal==null ? '' : $personal->alamat}}
   </div>
+
   <div class="form-group">
-    <label>Kota</label><br>
-  {{!empty($personal->kota) ? $personal->kota->nama : ''}}
-  </div>
-  <div class="form-group">
-    <label>Negara</label><br>
+    <label>Kebangsaan</label><br>
   {{!empty($personal->negara) ? $personal->negara->nama : ''}}
   </div>
   <div class="form-group">
-    <label>Kebangsaan</label><br>
+    <label>Negara</label><br>
   {{!empty($personal->residence_s) ? $personal->residence_s->nama:''}}
+  </div>  
+  @if($personal->residence=='1')
+    <div class="form-group">
+    <label>Kota</label><br>
+  {{!empty($personal->kota) ? $personal->kota->nama : ''}}
   </div>
+    <div class="form-group">
+    <label>Provinsi</label><br>
+{{--     {{$personal->provinsi->nama}} --}}
+  {{!empty($personal->provinsi) ? $personal->provinsi->nama : ''}}
+  </div>
+  @endif
 </div>
   
 </div>

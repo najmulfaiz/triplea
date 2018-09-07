@@ -12,7 +12,7 @@
              
         <div class="wizard">
             
-                <ul class="nav nav-wizard">
+                {{-- <ul class="nav nav-wizard">
 
                     <li class="active">
                         <a href="#step1" data-toggle="tab">Event</a>
@@ -38,18 +38,24 @@
                      <li class="disabled">
                         <a href="#step7" data-toggle="tab">Rekening</a>
                     </li>
-                </ul>
+                </ul> --}}
            
 
             <form action="{{ url('admin/event/create') }}" method="post" enctype="multipart/form-data">
             {{csrf_field()}}
-                <div class="tab-content">
-                    <div class="tab-pane active" id="step1">
-               
-               <br>
 
+            <ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Info Event</a></li>
+  <li><a data-toggle="tab" href="#menu1">Event Detail</a></li>
+  <li><a data-toggle="tab" href="#menu2">Event Term</a></li>
+  <li><a data-toggle="tab" href="#menu3">Fasilitas</a></li>
+  <li><a data-toggle="tab" href="#menu4">Group</a></li>
+  <li><a data-toggle="tab" href="#menu5">Kategori</a></li>
+  <li><a data-toggle="tab" href="#menu6">Rekening Bank</a></li>
+</ul>
 
-
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
 
 <div class="row">
 <div class="col-lg-6">
@@ -58,24 +64,28 @@
 <div class="form-group">
 
     <label>Nama Event</label>
-    <input type="text" name="nama_event" class="form-control">
+    <input type="text" name="nama_event" class="form-control" value="{{$event->nama_event}}">
 </div>
 <div class="form-group">
     <label>Tanggal</label>
-    <input type="date" name="tanggal" class="form-control">
+    <input type="date" name="tanggal" class="form-control" value="{{$event->tanggal}}">
 </div>
 <div class="form-group">
-    <label>Kota</label>
+    <label>Kota</label><br>
     <select class="form-control select2" name="kota">
     @foreach ($kota as $k)
         {{-- expr --}}
-        <option value="{{$k->id}}">{{$k->nama}}</option>
+        <option {{$k->id_kota==$k->id ? 'selected':''}} value="{{$k->id}}">{{$k->nama}}</option>
     @endforeach
         
     </select>
 </div>
 <div class="form-group">
-    <label>Logo</label>
+    <label>Logo</label><br>
+
+    <img src="{{ url('event/'.$event->logo) }}" class="img img-thumbnail" style="width: 200px;height: 200px;">
+       <br>
+    <br>
     <input type="file" name="logo" class="form-control">
 </div>
 
@@ -86,12 +96,8 @@
 </div>
     
 </div>
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="step2">
-                 
+  </div>
+  <div id="menu1" class="tab-pane fade">         
 
                          <h3>Event Detail</h3>
 <div class="row">
@@ -100,8 +106,8 @@
         <label>Status Registrasi</label>
         <select class="form-control" name="status_registrasi">
             <option value="">Pilih Status</option>
-            <option value="0">Close</option>
-            <option value="1">Open</option>
+            <option {{$eventDetail->first()->status_registrasi=='0'?'selected':''}} value="0">Close</option>
+            <option {{$eventDetail->first()->status_registrasi=='1'?'selected':''}} value="1">Open</option>
         </select>
     </div>
                              
@@ -109,36 +115,26 @@
 </div>
     <div class="form-group">
         <label>Deskripsi</label>
-        <textarea name="deskripsi_event_detail" class="form-control textarea-t"></textarea>
+        <textarea name="deskripsi_event_detail" class="form-control textarea-t">{{$eventDetail->first()->deskripsi}}</textarea>
     </div>
-                        <ul class="list-inline pull-right">
-                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="step3">
-                        <h3>Event Term</h3>
+  </div>
+  <div id="menu2" class="tab-pane fade">
+  	         <h3>Event Term</h3>
                        
     <div class="form-group">
-        <textarea class="form-control textarea-t" name="event_term"></textarea>
+        <textarea class="form-control textarea-t" name="event_term">{{$eventTerm->first()->deskripsi}}</textarea>
     </div>
-             
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="step4">
-                        <h3>Fasilitas Yang Didapat</h3>
+  </div>
+  <div id="menu3" class="tab-pane fade">
+  	        <h3>Fasilitas Yang Didapat</h3>
     <div class="form-group">
-        <textarea class="form-control textarea-t" name="Fasilitas"></textarea>
+        <textarea class="form-control textarea-t" name="Fasilitas">{{$fasilitas->first()->deskripsi}}</textarea>
     </div>
+  </div>
+  <div id="menu4" class="tab-pane fade">
+  	 <h3>Group</h3>
 
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="step5">
 
-                        <h3>Group </h3>
 <div style="display: none;" id="form_group">
     
 </div>
@@ -160,14 +156,9 @@
 </table>
 
 
-                        <ul class="list-inline pull-right">
-                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-                    </div>
-
-
-                    <div class="tab-pane" id="step6">
-                        <h3>Kategori</h3>
+  </div>
+  <div id="menu5" class="tab-pane fade">
+  	            <h3>Kategori</h3>
 
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalK">Tambah Kategori</button>
 <br>
@@ -195,54 +186,18 @@
             </tr>
         </tbody>
     </table>
+  </div>
 </div>
-
-                        <ul class="list-inline pull-right">
-                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
-                        </ul>
-
-                    </div>
-                    <div class="tab-pane" id="step6">
-                        <h3>Kategori</h3>
-
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalK">Tambah Kategori</button>
-<br>
-
-<br>
-<div style="display: none;" id="kategori_form">
-    
-</div>
-
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <th>Event</th>
-            <th>Kategori</th>
-            <th>Harga</th>
-            <th>Usia Min</th>
-            <th>Usia Max</th>
-            <th>Kuota</th>
-
-        </thead>
-        <tbody id="kategori_wrap">
-            <tr class="not">
-                <td colspan="3"></td>
-                <td><center>Belum Ada Event</center></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-                    </div>
-                    <div class="tab-pane" id="step7">
-                      <div class="col-lg-6">
-                        <h3>Rekening Tujuan</h3>
-
-
+<div id="menu6" class="tab-pane fade">
+	 <h3>Rekening Tujuan</h3>
+<div class="row">
+	<div class="col-lg-6">
+		
 
 <br>
 <div class="form-group">
   <label>Bank</label>
-  <select class="form-control" name="bank">
+  <select class="form-control select2" name="bank">
     <option value="">Pilih</option>
     @foreach ($bank as $b)
       {{-- expr --}}
@@ -258,24 +213,9 @@
   <label>Nomor Rekening</label>
 <input type="text" name="no_rekening" class="form-control">
 </div>
-
-
-
-                        <ul class="list-inline pull-right">
-                           <li><button type="submit" class="btn btn-primary ">Selesai</button></li>
-                        </ul>
-
-                      </div>
-
-
-                    </div>
-
-                    <div class="clearfix"></div>
-                </div>
-            </form>
-        </div>
-
-            </div>
+	</div>	
+</div>
+</div>
             <!-- /.box-body -->
 
 
@@ -327,10 +267,9 @@
               <label>Usia Maksimal</label>
               <input type="text" name="" class="form-control" id="usia_max">
           </div>
-          <div class="form-group">
-              <label>Kuota</label>
-              <input type="text" name="" class="form-control" id="kuota_kategori">
-          </div>
+                    <div class="form-group">
+
+   </div>
 </div>
 
 
@@ -654,7 +593,6 @@ function nextTab(elem) {
         var harga          = $("#harga").val();
         var usia_min      = $("#usia_min").val();
         var usia_max        = $("#usia_max").val();
-        var kuota_kategori        = $("#kuota_kategori").val();
         var deskripsi       = $("#deskripsi").val();
 
         var tr = "<tr class='tr-"+math+"'> ";
@@ -663,7 +601,6 @@ function nextTab(elem) {
         tr += "<td>"+harga+"</td>";
         tr += "<td>"+usia_min+"</td>";
         tr += "<td>"+usia_max+"</td>";
-        tr += "<td>"+kuota_kategori+"</td>";
         tr += "<td><button class='btn btn-danger delete-row' data-id='"+math+"'>Hapus</button></td>";
         tr += "</tr>";
 
@@ -673,7 +610,6 @@ var          input = "<input class='"+math+"' type='hidden' value='"+nama_katego
         input +=  "<input class='"+math+"' type='hidden' value='"+usia_min+"' name='usia_min[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+usia_max+"' name='usia_max[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+deskripsi+"' name='deskripsi[]'>";
-        input +=  "<input class='"+math+"' type='hidden' value='"+kuota_kategori+"' name='kuota_kategori[]'>";
 
 
 
@@ -693,7 +629,9 @@ var          input = "<input class='"+math+"' type='hidden' value='"+nama_katego
     })
 
     $(document).ready(function(){
-      $(".select2").select2();
+      $(".select2").select2({
+      	width:'100%'
+      });
     });
 </script>
     {{-- expr --}}

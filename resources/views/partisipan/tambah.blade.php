@@ -6,7 +6,7 @@
 			<option value="">Pilih</option>
 			@if ($partisipan->count()>0)
 			@foreach ($partisipan->get() as $p)
-			<option data-id="{{$kategori->first()->id}}"  value="{{$p->id}}">{{$p->nama_awal.' '.$p->nama_akhir}}</option>
+			<option   value="{{$p->id}}">{{$p->nama_awal.' '.$p->nama_akhir}}</option>
 				{{-- expr --}}
 			@endforeach
 				{{-- expr --}}
@@ -22,12 +22,11 @@
 			<label>Kategori</label>
 			<select class="form-control kategori-data" id="kategori">
 			<option value="">Pilih</option>
-			@if ($kategori->count()>0)
-			@foreach ($kategori->get() as $p)
-			@if ($p->kategori!=null)
+			@if ((count($kategori)))
+			@foreach ($kategori as $p)
 				{{-- expr --}}
-			<option data-price="{{$p->kategori['harga']}}" value="{{$p->kategori['id']}}">{{$p->kategori['nama']}}</option>
-			@endif
+			<option data-price="{{$p->harga}}" value="{{$p->id_kategori}}">{{$p->nama}}</option>
+
 				{{-- expr --}}
 			@endforeach
 				{{-- expr --}}

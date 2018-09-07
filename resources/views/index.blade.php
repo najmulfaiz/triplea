@@ -30,7 +30,6 @@
     <!-- Navigation -->
  @include('components.nav')
  
-
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('{{ asset('assets/img/home-bg.jpg') }}');margin-bottom: 0;"  id="masthead">
       <div class="overlay"></div>
@@ -54,6 +53,7 @@
 
             </div>
           </div>
+          
         </div>
       </div>
     </header>
@@ -122,7 +122,7 @@
 <div class="card with-box-shadow">
       <a href="{{ url('/'.str_slug($d->nama,'-').'-'.$d->id) }}">
 
-<div id="bg"  class="bg" style="background-image: url('{{$d->logo}}')">
+<div id="bg"  class="bg" style="background-image: url('{{ asset('event/'.$d->logo) }}')">
 
   
 </div>

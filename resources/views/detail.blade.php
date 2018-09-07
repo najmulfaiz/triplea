@@ -50,31 +50,51 @@
       <thead>
               <th>Nama</th>
               <th>Harga</th>
-              <th>Kuota</th>
               <th>Opsi</th>
 
       </thead>
 
         <tbody>
 @foreach ($data->group as $g)
-
-@if (!is_null($g->kategori['nama']))
+@foreach ($g->Kategori as $k)
+    {{-- expr --}}
+@if (!is_null($k->nama))
   {{-- expr --}}
+@php
+  $earlyBird = App\EarlyBird::where('id_kategori',$k->id);
+  if($earlyBird->count()>0){
+    $dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='1' and b.status_bayar='".$k->id."'");
+    $count = $dibeli;
+    $count = $count[0]->count;
+    $kuota = $earlyBird->first()->kuota;
+    // echo $kuota;
+    if($count < $kuota){
+      $harga= $earlyBird->first()->harga;
+    }
+    else{
+      $harga = $kharga;
+    }
 
+  }
+  else{
+          $harga = $k->harga;
+  }
+@endphp
 <tr>
-  <td>{{$g->kategori['nama']}}</td>
-  <td>{{$g->kategori['harga']}}</td>
-  <td>{{$g->kategori['kuota']}}</td>
+  <td>{{$k->nama}}</td>
+  <td>{{$harga}}</td>
   <td>
     <form action="{{ url('buy') }}" method="post">
     {{csrf_field()}}  
-    <input type="hidden" name="id_kategori" value="{{$g->kategori['id']}}">
+    <input type="hidden" name="id_kategori" value="{{$k->id}}">
+
     <button type="submit" class="btn btn-primary">Beli</button>
     </form>
   </td>
 </tr>
   </li>
 @endif
+  @endforeach  
   @endforeach
   </tbody>
       </table>
@@ -131,7 +151,7 @@
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 {{-- <h3>Deskripsi</h3> --}}
-{{$data->eventDetail!=null ? $data->eventDetail->deskripsi :''}}
+{!!$data->eventDetail!=null ? $data->eventDetail->deskripsi :''!!}
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 {{--   <h3>Fasilitas</h3> --}}

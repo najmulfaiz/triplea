@@ -11,7 +11,7 @@ class Group extends Model
 	public $timestamps = false;
 
 	public function kategori(){
-		return $this->hasOne('App\Kategori','id_group');
+		return $this->hasMany('App\Kategori','id_group');
 	}
 	public function event(){
 		return $this->hasOne('App\Event','id','id_event');

@@ -202,8 +202,10 @@ Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode 
 
           </div>
           
-          <center><b>Bank BCA</b><br>
-                    3310421111 <br> a/n TIYAS HENDRA SAPUTRA
+          <center><b>{{$rekening->bank->nama_bank}}</b><br>
+                    {{$rekening->no_rekening}} <br> a/n 
+
+                    {{$rekening->nama_pemilik}}
 
           </center>
 

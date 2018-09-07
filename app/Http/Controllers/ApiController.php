@@ -42,8 +42,8 @@ class ApiController extends Controller
 		$pid = $request->pid;
 
 		$personal = PersonalDetail::find($pid);
-		$group = Group::find($id);
-		$kategori = Kategori::where('id_group',$group->id)->first();
+		// $group = Group::find($id);
+		$kategori = Kategori::find($id);
 
 		$id_nationality = $group->nationality;
 		$nasionality = $personal->nasionality;

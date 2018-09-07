@@ -11,6 +11,6 @@ class Kategori extends Model
 	public $timestamps = false;
 
 	public function group(){
-		return $this->hasOne('App\Group','id','id_group');
+		return $this->hasMany('App\Group','id','id_group');
 	}
 }
