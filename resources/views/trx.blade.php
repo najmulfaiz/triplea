@@ -51,12 +51,12 @@
   <label>
     <b>Kategori</b>
   </label><br>
-  {{$event->kategori->nama}}
-
+{{--   {{$event->kategori->nama}}
+ --}}
 </div>
 <div class="form-group">
   <label><b>Lokasi</b></label><br>
-  {{$event->kota->nama}}
+{{--   {{$event->kota->nama}} --}}
 </div>
 <div class="form-group">
   <label><b>Keterangan</b></label><br>
