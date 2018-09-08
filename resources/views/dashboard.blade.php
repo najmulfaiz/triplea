@@ -485,10 +485,10 @@ function cariAlamat(ref){
       var val = $(this).val();
       var n = $(this).attr('data-id');
       // alert(val.length);
-      if (val.length < 16) {
-        $(".msg").html('<span class="badge badge-danger">NIK Harus 16 Digit</span>');
-        $(".submit-profil").attr('disabled','disabled');
-      }else{
+      // if (val.length < 16) {
+      //   $(".msg").html('<span class="badge badge-danger">NIK Harus 16 Digit</span>');
+      //   $(".submit-profil").attr('disabled','disabled');
+      // }else{
         if(val.length ==16){
           $.ajax({
             url: "{{ url('/nik') }}",
@@ -522,7 +522,7 @@ function cariAlamat(ref){
         $(".submit-profil").removeAttr('disabled'); 
       }
         }
-      }
+      // }
     });
 
   $(document).on('click','.btn-modal',function(){

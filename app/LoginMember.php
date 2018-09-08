@@ -9,4 +9,6 @@ class LoginMember extends Model
     //
 	protected $table = 'login_member';
 	public $timestamps = false;
+	protected $hidden = ['password'];
+
 }

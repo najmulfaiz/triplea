@@ -35,6 +35,12 @@
                      <li class="disabled">
                         <a href="#step6" data-toggle="tab">Kategori</a>
                     </li>
+                     <li class="disabled">
+                        <a href="#step7" data-toggle="tab">Jersey</a>
+                    </li>
+                     <li class="disabled">
+                        <a href="#step8" data-toggle="tab">Rekening</a>
+                    </li>
                 </ul>
            
 
@@ -63,7 +69,7 @@
 </div>
 <div class="form-group">
     <label>Kota</label>
-    <select class="form-control" name="kota">
+    <select class="form-control select2" name="kota">
     @foreach ($kota as $k)
         {{-- expr --}}
         <option value="{{$k->id}}">{{$k->nama}}</option>
@@ -84,7 +90,7 @@
     
 </div>
                         <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Continue</button></li>
+                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
                         </ul>
                     </div>
                     <div class="tab-pane" id="step2">
@@ -109,7 +115,7 @@
         <textarea name="deskripsi_event_detail" class="form-control textarea-t"></textarea>
     </div>
                         <ul class="list-inline pull-right">
-                           <li><button type="button" class="btn btn-primary btn-next">Continue</button></li>
+                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
                         </ul>
                     </div>
                     <div class="tab-pane" id="step3">
@@ -120,17 +126,17 @@
     </div>
              
                         <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Continue</button></li>
+                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
                         </ul>
                     </div>
                     <div class="tab-pane" id="step4">
                         <h3>Fasilitas Yang Didapat</h3>
     <div class="form-group">
-        <textarea class="form-control textarea-t"></textarea>
+        <textarea class="form-control textarea-t" name="Fasilitas"></textarea>
     </div>
 
                         <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary btn-next">Continue</button></li>
+                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
                         </ul>
                     </div>
                     <div class="tab-pane" id="step5">
@@ -144,14 +150,21 @@
 
 <br>
 
-
-<div class="row" id="row">
-
+<table class="table table-responsive" >
+  <thead>
+    <th>Nama</th>
+    <th>Status</th>
+    <th>Nationality</th>
+    <th>Kuota</th>
+  </thead>
+  <tbody id="wrap-tbody">
     
-</div>
+  </tbody>
+</table>
+
 
                         <ul class="list-inline pull-right">
-                           <li><button type="button" class="btn btn-primary btn-next">Continue</button></li>
+                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
                         </ul>
                     </div>
 
@@ -188,8 +201,92 @@
 </div>
 
                         <ul class="list-inline pull-right">
+                           <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
+                        </ul>
+
+                    </div>
+                    <div class="tab-pane" id="step6">
+                        <h3>Kategori</h3>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalK">Tambah Kategori</button>
+<br>
+
+<br>
+<div style="display: none;" id="kategori_form">
+    
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <th>Event</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Usia Min</th>
+            <th>Usia Max</th>
+            <th>Kuota</th>
+
+        </thead>
+        <tbody id="kategori_wrap">
+            <tr class="not">
+                <td colspan="3"></td>
+                <td><center>Belum Ada Event</center></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+                    </div>
+
+                    <div class="tab-pane" id="step7">
+                      <h3>Ukuran Jersey</h3>
+
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="input_fields_wrap_file">
+    <button class="add_field_button_file btn btn-primary">Tambah Jersey</button>
+</div>
+
+
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
+                        </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="step8">
+                      <div class="col-lg-6">
+                        <h3>Rekening Tujuan</h3>
+
+
+
+<br>
+<div class="form-group">
+  <label>Bank</label>
+  <select class="form-control" name="bank">
+    <option value="">Pilih</option>
+    @foreach ($bank as $b)
+      {{-- expr --}}
+      <option value="{{$b->kode_bank}}">{{$b->kode_bank}} - {{$b->nama_bank}}</option>
+    @endforeach
+  </select>
+</div>
+<div class="form-group">
+  <label>Nama Pemilik</label>
+<input type="text" name="nama_pemilik" class="form-control">
+</div>
+<div class="form-group">
+  <label>Nomor Rekening</label>
+<input type="text" name="no_rekening" class="form-control">
+</div>
+
+
+
+                        <ul class="list-inline pull-right">
                            <li><button type="submit" class="btn btn-primary ">Selesai</button></li>
                         </ul>
+
+                      </div>
+
 
                     </div>
 
@@ -250,11 +347,10 @@
               <label>Usia Maksimal</label>
               <input type="text" name="" class="form-control" id="usia_max">
           </div>
-                    <div class="form-group">
-
+          <div class="form-group">
               <label>Kuota</label>
-            <input type="text" name="" class="form-control" id="kuota">
-   </div>
+              <input type="text" name="" class="form-control" id="kuota_kategori">
+          </div>
 </div>
 
 
@@ -314,6 +410,9 @@
         
     </select>
 </div>
+
+              <label>Kuota</label>
+            <input type="text" name="" class="form-control" id="kuota">
       </div>
 </div>
       </div>
@@ -506,6 +605,7 @@ function nextTab(elem) {
     $(document).on('click','#ok',function(){
         var nama_grup = $("#nama_grup").val();
         var status_grup = $("#status_grup").val();
+        var kuota = $("#kuota").val();
         var nationality_grup  = $("#nationality_grup").val();
 
         var st = "";
@@ -542,11 +642,20 @@ function nextTab(elem) {
 
 
 
-        var res = '   <div class="col-lg-3"><div class="panel panel-default"><div class="panel-body"><ul class="list-group"><li class="list-group-item"><b>'+nama_grup+'</b> </li><li class="list-group-item">'+st+' Status</li><li class="list-group-item">'+ng+' Negara</li></ul></div></div></div>';
-        $("#row").append(res);
+      /*        var res = '   <div class="col-lg-3"><div class="panel panel-default"><div class="panel-body"><ul class="list-group"><li class="list-group-item"><b>'+nama_grup+'</b> </li><li class="list-group-item">'+st+' Status</li><li class="list-group-item">'+ng+' Negara</li></ul></div></div></div>';*/
+
+        var tb = '';
+        tb += '<tr>';
+        tb += '<td>'+nama_grup+'</td>';
+        tb += '<td>'+st+'</td>';
+        tb += '<td>'+ng+'</td>';
+        tb += '<td>'+kuota+'</td>';
+        tb += '</tr>';
+        $("#wrap-tbody").append(tb);
 
         var input = "<input type='hidden' value='"+nama_grup+'-'+math+"' name='nama_grup[]'>";
         input +=  "<input type='hidden' value='"+v_status_grup+"' name='status_grup[]'>";
+        input +=  "<input class='"+math+"' type='hidden' value='"+kuota+"' name='kuota[]'>";
         input +=  "<input type='hidden' value='"+ng_status+"' name='lokasi_grup[]'>";
 
         $("#form_group").append(input);
@@ -565,7 +674,7 @@ function nextTab(elem) {
         var harga          = $("#harga").val();
         var usia_min      = $("#usia_min").val();
         var usia_max        = $("#usia_max").val();
-        var kuota           = $("#kuota").val();
+        var kuota_kategori        = $("#kuota_kategori").val();
         var deskripsi       = $("#deskripsi").val();
 
         var tr = "<tr class='tr-"+math+"'> ";
@@ -574,17 +683,17 @@ function nextTab(elem) {
         tr += "<td>"+harga+"</td>";
         tr += "<td>"+usia_min+"</td>";
         tr += "<td>"+usia_max+"</td>";
-        tr += "<td>"+kuota+"</td>";
+        tr += "<td>"+kuota_kategori+"</td>";
         tr += "<td><button class='btn btn-danger delete-row' data-id='"+math+"'>Hapus</button></td>";
         tr += "</tr>";
 
-var          input = "<input class='"+math+"' type='hidden' value='"+nama_kategori+"' name='nama_kategori[]'>";
+var          input = "<input class='"+math+"' type='hidden' value='"+nama_kategori+'-'+kategori_grup_val+"' name='nama_kategori[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+kategori_grup_val+"' name='kategori_group[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+harga+"' name='harga_kategori[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+usia_min+"' name='usia_min[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+usia_max+"' name='usia_max[]'>";
-        input +=  "<input class='"+math+"' type='hidden' value='"+kuota+"' name='kuota[]'>";
         input +=  "<input class='"+math+"' type='hidden' value='"+deskripsi+"' name='deskripsi[]'>";
+        input +=  "<input class='"+math+"' type='hidden' value='"+kuota_kategori+"' name='kuota_kategori[]'>";
 
 
 
@@ -602,6 +711,34 @@ var          input = "<input class='"+math+"' type='hidden' value='"+nama_katego
         $(".tr-"+id).remove();
 
     })
+
+    $(document).ready(function(){
+      $(".select2").select2();
+    });
+
+    $(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap_file"); //Fields wrapper
+    var add_button      = $(".add_field_button_file"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            var html = '';
+            html += '<div><br/>';
+
+            html += '<input type="file" name="jersey[]" class="form-control"/><br/><input type="text" class="form-control" name="ukuran[]" placeholder="ukuran"><br/><textarea class="form-control" name="deskripsi_jersey[]""></textarea><br/><a href="#" class="remove_field">Hapus</a>';
+            html += '</div>';
+            $(wrapper).append(html); //add input box
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
 </script>
     {{-- expr --}}
 @endpush

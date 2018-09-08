@@ -12,6 +12,12 @@
 */
 
 
+ if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
+// Ignores notices and reports all other kinds... and warnings
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+// error_reporting(E_ALL ^ E_WARNING); // Maybe this is enough
+}
+
 Route::get('/', 'MainController@index');
 
 // Route::get('/detail', function () {
@@ -69,9 +75,17 @@ Route::group(['prefix' => 'admin'], function() {
     //
 // 	Route::get('/admin/index', 'AdminController@index');
 // Route::get('admin/index/data', 'AdminController@data');
-
+Route::get('/event/data', 'EventController@data');
 Route::resource('event', 'EventController');
+
 Route::post('event/create','EventController@store');
+
+
+Route::get('/member/data', 'MemberController@data');
+Route::resource('member', 'MemberController');
+
+Route::get('/invoice/data', 'InvoiceController@data');
+Route::resource('invoice', 'InvoiceController');
 
 });
 // Route::get('/dashboard', function () {

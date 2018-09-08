@@ -19,6 +19,10 @@ class PersonalDetail extends Model
 	public function residence_s(){
 		return $this->belongsTo('App\Negara','residence');
 	}
+	public function provinsi(){
+				return $this->belongsTo('App\Provinsi','id_provinsi');
+
+	}
 	public function medical(){
 		return $this->hasOne('App\EmergencyMedical','id_personal_detail');
 	}
