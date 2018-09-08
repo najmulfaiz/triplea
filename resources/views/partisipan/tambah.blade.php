@@ -1,5 +1,5 @@
 <div class="row"> 
-	<div class="col-lg-6">
+	<div class="col-lg-4">
 		<div class="form-group"> 
 			<label>Partisipan</label>
 			<select class="form-control" id="partisipan">
@@ -24,8 +24,9 @@
 			<option value="">Pilih</option>
 			@if ((count($kategori)))
 			@foreach ($kategori as $p)
+
 				{{-- expr --}}
-			<option data-price="{{$p->harga}}" value="{{$p->id_kategori}}">{{$p->nama}}</option>
+			<option data-price="{{$p->harga}}" value="{{$p->id_kategori}}">{{$p->nama.'('.$p->usia_min.' - '.$p->usia_max.')'}}</option>
 
 				{{-- expr --}}
 			@endforeach
@@ -36,30 +37,38 @@
 		</div>
 
 	</div>
-	<div class="col-lg-6">
+	<div class="col-lg-8">
 		
 	<h4>Jersey</h4>
 <div class="row">
-@if ($jersey->count() >0 )
+<div class="col-lg-6">
   {{-- expr --}}
-  @foreach ($jersey->get() as $j)
 
-  <div class="col-6">
-    
+  <div class="row">
+  	<div class="col-lg-6">
+	  <img src="{{ url('/uploads/'.$jersey->get()[0]->foto) }}" class="img img-responsive" style="width: 100%;">
+  		
+  	</div>
+  	<div class="col-lg-6">
+	  <table class="table table-striped">
+	@if ($jersey->count() >0 )
+  @foreach ($jersey->get() as $j)
+  	<tr>
+  		<td>{{$j->ukuran}}</td>
+  		<td>{{$j->deskripsi}}</td>
+  		<td>
 <input  
   type="radio" name="jersey" 
-  id="{{$j->id}}" class="input-hidden" value="{{$j->id}}" required data-text="{{$j->ukuran}}"/>
-<label for="{{$j->id}}">
-  <img 
-    src="{{url('uploads/'.$j->foto)}}" />
-</label><br>
-<center>
-<h4>{{$j->ukuran}}</h4>
-</center>
-  </div>
+  id="{{$j->id}}"  value="{{$j->id}}" required data-text="{{$j->ukuran}}"/>
+<label for="{{$j->id}}"></td>
+  	</tr>
   @endforeach
-@endif
+  	@endif
+  </table>  		
+  	</div>
+  </div>
 
+</div>
 
 </div>
 	</div>

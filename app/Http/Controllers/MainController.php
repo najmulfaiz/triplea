@@ -144,6 +144,8 @@ class MainController extends Controller
 		$userid = session('userid');
 
 
+		session('id_grup',$id_grup);
+
 		$personal = PersonalDetail::where('id_login_member',$userid)->first();
 
 		// if ($nationality == 1) {
@@ -265,6 +267,7 @@ $user = LoginMember::find(session('userid'));
 							// echo "string";
 			$event = Event::find($id);
 		$kategori_id = $request->session()->get('kategori');
+		$id_grup = $request->session()->get('id_grup');
 		$kategori = Kategori::where('id',$kategori_id)->get();
 		// $userid = session('userid');
 		// $personal = PersonalDetail::where('id_login_member',$userid);
@@ -333,11 +336,13 @@ $user = LoginMember::find(session('userid'));
 		// echo $personal->first()->id;
 		// echo $personal;
 
-		  $earlyBird = EarlyBird::where('id_kategori',$kategori_id);
+		  $earlyBird = EarlyBird::where('id_grup',session('id_grup'));
+
   if($earlyBird->count()>0){
     $dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='1' and b.status_bayar='".$kategori_id."'");
     $count = $dibeli;
     $count = $count[0]->count;
+    // $count = 499;
     $kuota = $earlyBird->first()->kuota;
     // echo $kuota;
     if($count < $kuota){
@@ -362,8 +367,9 @@ $user = LoginMember::find(session('userid'));
   // echo $kategori->get();
 
   $kategori = Kategori::where('id_group',session('id_grup'));
-		return view('/checkout',compact('group','personal','kategori','kategori_id','jersey','id','user','emergency','eventid','harga','event'));			
+		return view('/checkout',compact('group','personal','kategori','kategori_id','jersey','id','user','emergency','eventid','harga','event','state'));			
 
+// echo session('kategori');
   // return Kategori::where('id_group',41)->get();
 		}
 
@@ -560,14 +566,10 @@ $jml_total = $request->total;
 			// print_r($transaction->count());
 					$dt = DetailTransaction::where('id_transaction',$code);
 
-			// return view('invoice/invoice',compact('transaction','detail','dt'));
-		// }
-
-		// else{
-		// 	echo "string";
-		// }
 
 
+
+			$early = strlen($request->early);
 
 		
 		$total = $dt->sum('harga');
@@ -587,7 +589,7 @@ $jml_total = $request->total;
 		$rekening = $rekening->first();
 
 
-Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total], function ($message)use(&$to,&$subject) {
+	Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'detail'=>$detail,'dt'=>$dt,'total'=>$total,'early'=>$early], function ($message)use(&$to,&$subject) {
 
         $message->from('no-reply@tripleasport.com', 'Triple A Sport Management');
 
@@ -610,18 +612,19 @@ Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'
 
 	$this->middleware('login-auth');
 		$kategori = Kategori::find($id);
+		$id_grup = $kategori->id_group;
 
 
 
-		  $earlyBird = EarlyBird::where('id_kategori',$id);
+		  $earlyBird = EarlyBird::where('id_grup',$id_grup);
   if($earlyBird->count()>0){
-    $dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='1' and b.status_bayar='".$id."'");
+    $dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='".$id."' and b.status_bayar='1'");
     $count = $dibeli;
     $count = $count[0]->count;
     $kuota = $earlyBird->first()->kuota;
     // echo $kuota;
     if($count < $kuota){
-    	  // $harga= $earlyBird->first()->harga;
+    	  $harga= $earlyBird->first()->harga;
     	  $state = "EARLY BIRD";
     }
     else{
@@ -635,7 +638,7 @@ Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'
            $state = "";   
 
   }
-
+// echo $harga;
 		$response = [
 		'id'=>$kategori->id,
 		'id_group'=>$kategori->group[0]->id,
@@ -644,6 +647,7 @@ Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'
 		'kuota'=>$kategori->kuota
 
 		];
+
 		return $response;
 // return $kategori;
 	}
@@ -839,7 +843,7 @@ Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'
 		}
 
 		$eventid = session('eventid');
-		$kategori = DB::select("SELECT kategori.harga,kategori.nama,kategori.id as id_kategori FROM `kategori` inner join `group` on kategori.id_group = group.id inner join event on group.id_event = event.id
+		$kategori = DB::select("SELECT kategori.harga,kategori.nama,kategori.id as id_kategori,kategori.usia_min,kategori.usia_max FROM `kategori` inner join `group` on kategori.id_group = group.id inner join event on group.id_event = event.id
 WHERE event.id='".$eventid."'
 ");
   

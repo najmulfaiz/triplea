@@ -33,6 +33,8 @@
 {{-- <p class="card-text"> --}}
 <form action="{{ url('/checkout') }}" method="post">
 {{csrf_field()}}
+
+<input type="hidden" name="early" value="{{$early}}">
 <table class="table table-bordered">
   <tr>
     <td>Event</td><td>{{$event->nama}}</td>
@@ -46,7 +48,7 @@
     <td>Kategori</td><td><select class="form-control" id="kategori" name="kategori">
       <option value="">Pilih Kategori</option>
       @foreach ($kategori->get() as $k)
-      <option value="{{$k->id}}">{{$k->nama}}</option>
+      <option {{$k->id==session('kategori') ? 'selected':''}} value="{{$k->id}}">{{$k->nama.' ( '.$k->usia_min.' - '.$k->usia_max.' tahun )'}}</option>
       @endforeach
     </select></td>
   </tr>
@@ -65,7 +67,7 @@
 <input type="hidden" name="" id="diskon_int">
 </table>
 <div class="row">
-<div class="col-lg-6">
+<div class="col-lg-6" style="margin: 0 auto;float: none;">
 <div class="form-group">
 <label>Nama BIB</label>
 <input type="text" name="nama_bib" class="form-control" id="nama_bib" required="">
@@ -83,16 +85,16 @@
   @foreach ($jersey->get() as $j)
 
   <div class="col-lg-3">
-    
+    <center>
 <input  
   type="radio" name="jersey" 
   id="{{$j->id}}" class="input-hidden" value="{{$j->id}}" required data-text="{{$j->ukuran}}"/>
 <label for="{{$j->id}}">
   <img 
-    src="{{$j->foto}}" />
+    src="{{url('uploads/'.$j->foto)}}" />
 </label><br>
-<center>
-<h4>{{$j->ukuran}}</h4>
+
+<h6>{{$j->ukuran}}- {{$j->deskripsi}}</h6>
 </center>
   </div>
   @endforeach
@@ -141,8 +143,8 @@
 {{-- <p class="card-text"> --}}
 
 <div class="form-group">
-  <label>Harga</label>
-  <h3>    Rp. <span id="harga-total">{{number_format($harga,0,',','.')}}</span></h3>
+  <label>Harga <span class="badge badge-success">{{$state}}</span></label>
+  <h3>    Rp. <span id="harga-total">{{number_format($harga,0,',','.')}}</span>  </h3>
 </div>
 
 <div class="form-group">
@@ -235,7 +237,6 @@
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     
-  <h3>Profil</h3>
   <form id="form" action="{{ url('/update-personal/'.$id) }}" method="post">
   <div class="row">
 
@@ -307,7 +308,6 @@
 
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-  <h3>Emergency Medical</h3>
   <form action="{{ url('/personal/medical/'.$id) }}" method="post">
   {{csrf_field()}}
   <div class="row">

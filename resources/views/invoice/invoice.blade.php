@@ -105,17 +105,13 @@ table{
           
 <div class="col-lg-4" style="width: 33.3%;float: left;">
 <span style="font-size: 25px;">  <b>INVOICE #{{$transaction->first()->id}}</b> <br></span>
-  Tanggal {{date('d-m-y',strtotime($transaction->first()->tgl_transaksi))}} <br>
+  Tanggal {{date('d-m-Y',strtotime($transaction->first()->tgl_transaksi))}} <br>
 </div>
 <div class="col-lg-4" style="width: 33.3%;float: left;">
   <b>Ditagihkan Kepada</b><br>
     <span>{{$detail->formParticipant->personalDetail->nama_awal.' '.$detail->formParticipant->personalDetail->nama}}</span><br>
 
     <address>{{$detail->formParticipant->personalDetail->alamat}}</address><br>
-</div>
-<div class="col-lg-4" style="width: 33.3%;float: left;">
-  <b>Bayar Kepada</b><br>
-  TripleASport
 </div>
         </div>
 <div class="card" style="width: 100%;">
@@ -129,7 +125,7 @@ Hello, world.
 
 <table  border="1" style="width: 100%;pad">
 <tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
-  <td>Event</td><td>{{$transaction->first()->event->nama}}</td>
+  <td>Event</td><td><b>{{$transaction->first()->event->nama}}</b></td>
 </tr>
 <tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
   <td>Tanggal</td><td>{{date('d-M-Y',strtotime($transaction->first()->event->tanggal))}}</td>
@@ -155,7 +151,7 @@ Hello, world.
 @foreach ($dt->get() as $detailTransaction)
 
 <tr>
-  <td>{{$detailTransaction->formParticipant->personalDetail->nama_awal.' '.$detailTransaction->formParticipant->personalDetail->nama_akhir}}</td>
+  <td>{{$detailTransaction->formParticipant->personalDetail->nama_awal.' '.$detailTransaction->formParticipant->personalDetail->nama_akhir.'('.$detailTransaction->formParticipant->personalDetail->nik.')'}}</td>
 
   <td >{{$detailTransaction->kategori->nama}}</td>
   <td  style="text-align: right;">{{number_format($detailTransaction->harga,2,',','.')}}</td>
@@ -171,16 +167,16 @@ Hello, world.
 <br><br>
 <table  border="1" style="width: 100%;">
 <tr>
-  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Deskripsi</center></td><td  style="background-color: #1abc9c;color: #fff; height: 50px"><center>Harga</center></td>
+  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Deskripsi</center></td><td  style="background-color: #1abc9c;color: #fff; height: 50px"><center>Harga (IDR)</center></td>
 </tr>
   <tr>
-    <td>  Subtotal</td><td  style="text-align: right"> IDR {{number_format($total,2,',','.')}}</td>
+    <td>  Subtotal</td><td  style="text-align: right"> {{number_format($total,2,',','.')}}</td>
   </tr>
   <tr>
     <td>Diskon
 {!! !empty($transaction->first()->diskon_data) ? "<span style='background-color:#26A65B;padding:5px;color:#fff'>".$transaction->first()->diskon_data->kode."</span>" :'' !!}
 
-    </td><td  style="text-align: right">{{!empty($transaction->first()->diskon_data) ?($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':'IDR. '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : ''}}</td>
+    </td><td  style="text-align: right">{{!empty($transaction->first()->diskon_data) ?($transaction->first()->diskon_data->jenis=='2'? $transaction->first()->diskon_data->potongan.'%':' '.number_format($transaction->first()->diskon_data->potongan,2,',','.')) : '-'}}</td>
   </tr>
   <tr>
     <td>Kode Unik</td><td  style="text-align: right">{{$transaction->first()->validasi_no}}</td>
@@ -192,7 +188,7 @@ Hello, world.
 <br><br>
 @if ($transaction->first()->status_bayar=='0')
   {{-- expr --}}
-Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode unik </b>) ke rekening kami dibawah ini: 
+Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode unik </b>) sebelum Tanggal <b>{{date('d-M-Y H:i:s',strtotime(date('Y-m-d H:i:s', strtotime($transaction->first()->tgl_transaksi . ' +1 day'))))}}</b> ke rekening kami dibawah ini: 
  <div style="width: 30%;height: 100%;">  <br>
 
           <div style="margin-top:30px;">

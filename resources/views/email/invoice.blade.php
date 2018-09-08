@@ -170,7 +170,7 @@
 
 
   <tr>
-    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">  Subtotal</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"> <b> IDR {{number_format($total,2,',','.')}}</b></td>
+    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">  Subtotal</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"> <b>  {{number_format($total,2,',','.')}}</b></td>
   </tr>
   <tr>
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Diskon
@@ -182,7 +182,7 @@
     <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Kode Unik</td><td  style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b>{{$transaction->first()->validasi_no}}</b></td>
   </tr>
   <tr style="background: #ccc;">
-    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Harga Akhir</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b> <b>IDR {{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></b></td>
+    <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0">Harga Akhir {!!$early>1 ? '<b>EARLY BIRD</b>':"" !!}</td><td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;text-align: right;"><b> <b>IDR {{number_format($transaction->first()->harga_akhir,2,',','.')}}</b></b></td>
   </tr>
 
 {{--                             <tr>
@@ -198,8 +198,9 @@
 
                 <div style="text-align:center">
                     <div style="text-align:left;font-size:13px;margin:30px 0 10px;color:#000">
-Lakukan Pembayaran dengan melakukan transfer dana <b>(wajib dengan 3 digit kode unik )</b> ke rekening kami dibawah ini:
 
+  {{-- expr --}}
+Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode unik </b>) sebelum Tanggal <b>{{date('d-M-Y H:i:s',strtotime(date('Y-m-d H:i:s', strtotime($transaction->first()->tgl_transaksi . ' +1 day'))))}}</b> ke rekening kami dibawah ini: 
                     </div>
                 </div>
 
