@@ -14,6 +14,7 @@ use DNS1D;
 use Crypt;
 use QrCode;
 use App\Lib\Log;
+use App\Rekening;
 
 class TransactionController extends Controller
 {
@@ -117,7 +118,14 @@ $mail=    Mail::send('email.invoice-lunas', ['transaction'=>$transaction,'detail
     }
 
     public function test(){
-$data = $this->data();
+
+        $rekening = Rekening::all();
+
+        foreach ($rekening as $r) {
+            # code...
+            $no_rekening = $r->no_rekening;
+
+            $data = $this->data($no_rekening);
 /*return $data;*/
 $data = json_decode($data,true);
 $success = $data['success'];
@@ -175,6 +183,8 @@ if($success==1){
         
         
     }
+        }
+
 }
 
 
@@ -201,7 +211,7 @@ public function json(Request $request){
 
 }
 
-public function data(){
+public function data($rekening){
     
 // print_r($_SERVER);
 $data = array(
@@ -210,6 +220,8 @@ $data = array(
                             "from"    => date("Y-m-d")." 00:00:00",
                             "to"      => date("Y-m-d")." 23:59:59"
                             ),
+                    "service_code"    => "bca",
+                    "account_number"  => $rekening,                    
 
             )
 );
