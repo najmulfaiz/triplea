@@ -253,7 +253,7 @@
 
   $("#kode_diskon").keyup(  $.debounce(500,function(){
     var val = $(this).val();
-
+    
     var harga = $("#input-jumlah-total").val();
     var harga_total = $("#harga_total").val();
     if(harga=='0'){

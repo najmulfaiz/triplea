@@ -99,6 +99,7 @@ public function store(Request $request){
     $Rekening->nama_pemilik = $nama_pemilik;
     $Rekening->no_rekening = $no_rekening;
     $Rekening->id_event = $eventid;
+    $Rekening->save();
 
 
     // Event Detail 
@@ -158,6 +159,30 @@ public function store(Request $request){
     }
 
 
+
+    // Jersey 
+    $jersey = $request->file('jersey');
+    $deskripsi_jersey = $request->deskripsi_jersey;
+    $ukuran = $request->ukuran;
+
+    for ($i=0; $i < count($jersey) ; $i++) { 
+
+        $jersey_i = $jersey[$i];
+        $deskripsi_jersey_i = $deskripsi_jersey[$i];
+        $ukuran_i = $ukuran[$i];
+
+            $ext = $jersey_i->getClientOriginalExtension();
+            $encevent = md5('jersey'.time());
+            $jersey_i->move(public_path('uploads'),$encevent.'.'.$ext);
+            // $event->logo = $encevent.'.'.$ext;
+            $UkuranJersey  = new UkuranJersey;
+            $UkuranJersey->ukuran = $ukuran_i;
+            $UkuranJersey->foto = $encevent.'.'.$ext;
+            $UkuranJersey->deskripsi = $deskripsi_jersey_i;
+            $UkuranJersey->id_event = $eventid;
+            $UkuranJersey->save();
+    }
+    // $jersey = 
 
     // Kategori 
     $nama_kategori  = $request->nama_kategori;

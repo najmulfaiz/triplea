@@ -108,7 +108,7 @@
 
 <div class="row">
 <div class="col-lg-4">
-    <img src="{{$data->logo}}" class="rounded img img-responsive" style="width: 100%;">
+    <img src="{{ url('event/'.$data->logo) }}" class="rounded img img-responsive" style="width: 100%;">
 </div>
 <div class="col-lg-4">
   <ul class="list-group">

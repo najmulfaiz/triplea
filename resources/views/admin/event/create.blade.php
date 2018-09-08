@@ -36,7 +36,10 @@
                         <a href="#step6" data-toggle="tab">Kategori</a>
                     </li>
                      <li class="disabled">
-                        <a href="#step7" data-toggle="tab">Rekening</a>
+                        <a href="#step7" data-toggle="tab">Jersey</a>
+                    </li>
+                     <li class="disabled">
+                        <a href="#step8" data-toggle="tab">Rekening</a>
                     </li>
                 </ul>
            
@@ -233,7 +236,24 @@
     </table>
 </div>
                     </div>
+
                     <div class="tab-pane" id="step7">
+                      <h3>Ukuran Jersey</h3>
+
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="input_fields_wrap_file">
+    <button class="add_field_button_file btn btn-primary">Tambah Jersey</button>
+</div>
+
+
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-primary btn-next">Selanjutnya</button></li>
+                        </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="step8">
                       <div class="col-lg-6">
                         <h3>Rekening Tujuan</h3>
 
@@ -695,6 +715,30 @@ var          input = "<input class='"+math+"' type='hidden' value='"+nama_katego
     $(document).ready(function(){
       $(".select2").select2();
     });
+
+    $(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap_file"); //Fields wrapper
+    var add_button      = $(".add_field_button_file"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            var html = '';
+            html += '<div><br/>';
+
+            html += '<input type="file" name="jersey[]" class="form-control"/><br/><input type="text" class="form-control" name="ukuran[]" placeholder="ukuran"><br/><textarea class="form-control" name="deskripsi_jersey[]""></textarea><br/><a href="#" class="remove_field">Hapus</a>';
+            html += '</div>';
+            $(wrapper).append(html); //add input box
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
 </script>
     {{-- expr --}}
 @endpush

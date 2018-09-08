@@ -51,7 +51,7 @@
   id="{{$j->id}}" class="input-hidden" value="{{$j->id}}" required data-text="{{$j->ukuran}}"/>
 <label for="{{$j->id}}">
   <img 
-    src="{{$j->foto}}" />
+    src="{{url('uploads/'.$j->foto)}}" />
 </label><br>
 <center>
 <h4>{{$j->ukuran}}</h4>

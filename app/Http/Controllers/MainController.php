@@ -691,7 +691,11 @@ Mail::send('email.invoice', ['rekening'=>$rekening,'transaction'=>$transaction,'
 		$total = $detailTransaction->sum('harga');
 			// print_r($transaction->count());
 		// echo $total;
-			return view('trx',compact('transaction','detailTransaction','detail','dt','total'));
+
+		$eventid = $transaction->first()->id_event;
+		// echo $eventid;
+		$event = Event::find($eventid);
+			return view('trx',compact('transaction','detailTransaction','detail','dt','total','event'));
 
 			}
 
