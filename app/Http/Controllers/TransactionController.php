@@ -207,8 +207,9 @@ public function json(Request $request){
         $rekening = Rekening::all();
         foreach ($rekening as $r) {
             # code...
-            $data = $this->data($r->no_rekening);
-            return $data;
+            echo $r->no_rekening;
+            // $data = $this->data($r->no_rekening);
+            // return $data;
         }
     }
     //  return $this->data()   ;        
