@@ -203,7 +203,13 @@ if($success==1){
 
 public function json(Request $request){
     if($request->success == "true"){
- return $this->data()   ;        
+
+        $rekening = Rekening::all();
+        foreach ($rekening as $r) {
+            # code...
+            $data = $this->data($r->no_rekening);
+            return $data;
+        }
     }
     //  return $this->data()   ;        
     

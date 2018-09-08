@@ -848,7 +848,7 @@ WHERE event.id='".$eventid."'
 ");
   
 		// $kategori = Kategori::where('id_group',$id_event);
-		$jersey = UkuranJersey::where('id_event',$id_event);;
+		$jersey = UkuranJersey::where('id_event',$id_event);
 
 
 		// return $partisipan->get();
