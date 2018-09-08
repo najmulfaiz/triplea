@@ -48,13 +48,6 @@
 
 </div>
 <div class="form-group">
-  <label>
-    <b>Kategori</b>
-  </label><br>
-  {{$event->kategori}}
-
-</div>
-<div class="form-group">
   <label><b>Lokasi</b></label><br>
   {{$event->kota->nama}}
 </div>
