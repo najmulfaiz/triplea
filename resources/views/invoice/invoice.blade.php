@@ -104,7 +104,7 @@ table{
         <div style="width: 100%;float: left;margin-top: 30px;">
           
 <div class="col-lg-4" style="width: 33.3%;float: left;">
-<span style="font-size: 25px;">  <b>INVOICE #{{$transaction->first()->id}}</b> <br></span>
+<span style="font-size: 25px;">  <b>INVOICE #{{ strtoupper(substr($transaction->first()->event->nama, 0, 2)) . '-' . $transaction->first()->id}}</b> <br></span>
   Tanggal {{date('d-m-Y',strtotime($transaction->first()->tgl_transaksi))}} <br>
 </div>
 <div class="col-lg-4" style="width: 33.3%;float: left;">
@@ -133,8 +133,18 @@ Hello, world.
 <tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
   <td>Kota</td><td>{{$transaction->first()->event->kota->nama}}</td>
 </tr>
+
+@php
+  $arr_str = explode('|', $transaction->first()->keterangan_bank);
+  $deskripsi = trim($arr_str[0]);
+  $tanggal_tf = trim($arr_str[1]);
+@endphp
+
 <tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
-  <td>Keterangan Bank</td><td>{{$transaction->first()->keterangan_bank}}</td>
+  <td>Keterangan Bank</td><td>{{ $deskripsi }}</td>
+</tr>
+<tr style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;background: #fff;" width="40%">
+  <td>Tanggal Bayar</td><td>{{ $tanggal_tf }}</td>
 </tr>
 
 
@@ -142,9 +152,9 @@ Hello, world.
 <br><br>
 <table  border="1" style="width: 100%;pad">
 <tr>
-  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Partisipan</center></td>
-  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 75%;"><center>Kategori</center></td>
-  <td  style="background-color: #1abc9c;color: #fff; height: 50px"><center>Harga (IDR)</center></td>
+  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 50%;"><center>Partisipan</center></td>
+  <td style="background-color: #1abc9c;color: #fff; height: 50px;width: 25%;"><center>Kategori</center></td>
+  <td  style="background-color: #1abc9c;color: #fff; height: 50px;width: 25%;"><center>Harga (IDR)</center></td>
 </tr>
 
 @if ($dt->count()>0)
@@ -153,7 +163,7 @@ Hello, world.
 <tr>
   <td>{{$detailTransaction->formParticipant->personalDetail->nama_awal.' '.$detailTransaction->formParticipant->personalDetail->nama_akhir.'('.$detailTransaction->formParticipant->personalDetail->nik.')'}}</td>
 
-  <td >{{$detailTransaction->kategori->nama}}</td>
+  <td >{{ $detailTransaction->kategori->group->first()->nama . '-' .  $detailTransaction->kategori->nama}}</td>
   <td  style="text-align: right;">{{number_format($detailTransaction->harga,2,',','.')}}</td>
 </tr>
 @endforeach
@@ -203,6 +213,16 @@ Lakukan Pembayaran dengan melakukan transfer dana (<b>wajib dengan 3 digit kode 
 
                     {{$rekening->nama_pemilik}}
 
+          </center>
+
+          </div>
+@else
+<div class="row">
+  <div class="col-md-12 text-center">Tunjukan barcode ini untuk pengambilan Racepack</div>
+</div>
+<div style="margin-top:30px;">
+            <center>
+          <img src="{{ asset('/barcode/1baa2e0516d75995635026cdb84c0439.png') }}" class="img img-responsive" style="width: 200px; height: 200px;">
           </center>
 
           </div>

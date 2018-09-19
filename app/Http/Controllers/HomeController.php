@@ -38,7 +38,7 @@ class HomeController extends Controller
 			if ($personal->count()>0) {
 			$personal = $personal->first();
 				# code...
-			$emergency = EmergencyMedical::where('id_personal_detail',$personal->id);
+				$emergency = EmergencyMedical::where('id_personal_detail',$personal->id);
 			}
 			else{
 				$personal= null;
@@ -70,8 +70,8 @@ class HomeController extends Controller
 		return redirect()->back();
 
 	}
-	public function detail($id){
-
+	public function detail(Request $request, $id){
+		$tab_selected = $request['type'];
 		$personal = PersonalDetail::where('id',$id);
 		if ($personal->count() != 0) {
 			$personal = $personal->first();
@@ -86,10 +86,16 @@ class HomeController extends Controller
 
 		$emergency = EmergencyMedical::where('id_personal_detail',$id);
 
-		return view('personal/detail',compact('personal','kota','negara','id','emergency'));
+		return view('personal/detail',compact('personal','kota','negara','id','emergency', 'tab_selected'));
 
 	}
 	public function updatePersonal(Request $request){
+		// return $request->image;
+		// $this->validate($request, [
+		// 	'image' => 'required',
+  //           'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:500'
+		// ]);
+		
 		// print_r($request->all());
 		$nik = $request->nik;
 		$nama_awal = $request->nama_awal;

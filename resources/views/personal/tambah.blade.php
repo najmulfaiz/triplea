@@ -1,4 +1,3 @@
-
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Personal Detail</a>
@@ -8,28 +7,39 @@
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     
-  <h3>Tambah Personal</h3>
-  <form id="form" action="{{ url('/personal/tambah') }}" method="post" enctype="multipart/form-data">
-  <div class="col-lg-6" style="float: none;margin: 0 auto;">
-      <div id="image-preview" class="image-preview" style="background-image: url('uploads/id-card.png');background-position: center center; background-size: cover;">
-  <label class="image-label" for="image-upload" id="image-label">ID Card</label>
-  <input class="image-upload" type="file" name="image" id="image-upload" />
-</div>
-
-<p id="error1" style="display:none; color:#FF0000;">
-Format Gambar Harus JPG, JPEG, PNG or GIF.
-</p>
-<p id="error2" style="display:none; color:#FF0000;">
-Maksimal Ukuran Gambar 200KB
-</p>
-
+  <!-- <h3>Tambah Personal</h3> -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-primary">
+        <i class="fa fa-info-circle"></i>&nbsp; Silahkan lengkapi isian form dibawah ini dengan benar, gunakan Kartu Identitas yang berlaku seperti SIM, KTP, Passport, pastikan semua data terisi. Terima Kasih
+      </div>
+    </div>
   </div>
+  
+  <form id="form" action="{{ url('/personal/tambah') }}" method="post" enctype="multipart/form-data">
+
+  <div class="row justify-content-md-center mb-2">
+      <div class="col-lg-5 text-center">
+      <div id="image-preview" class="image-preview">
+        <label class="image-label" for="image-upload" id="image-label">ID Card</label>
+        <input class="image-upload" type="file" name="image" id="image-upload" />
+      </div>
+      <span class="text-muted">File Gambar (max 200Kb)</span>
+      <p id="error1" style="display:none; color:#FF0000;">
+        Format Gambar Harus JPG, JPEG, PNG or GIF.
+      </p>
+      <p id="error2" style="display:none; color:#FF0000;">
+        Maksimal Ukuran Gambar 200KB
+      </p>
+      </div>
+  </div>
+
   <div class="row">
 
 <div class="col-lg-6">
 {{csrf_field()}}
   <div class="form-group">
-    <label>NIK</label>
+    <label>NIK/ID Card/SIM/No Passport</label>
     <input type="text" name="nik" class="form-control nik-for-modal" id="nik">  
   </div>
 
@@ -124,8 +134,8 @@ Maksimal Ukuran Gambar 200KB
 <div class="msg">
   
 </div>
+<div id="pesan"></div>
 <br><br>
-
 <center><button id="submit" type="submit" class="btn btn-primary submit-profil">Simpan</button></center>
 </form>
 

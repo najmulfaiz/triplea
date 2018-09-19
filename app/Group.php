@@ -15,6 +15,8 @@ class Group extends Model
 	}
 	public function event(){
 		return $this->hasOne('App\Event','id','id_event');
-
+	}
+	public function early_bird(){
+		return $this->hasMany('App\EarlyBird', 'id_grup');
 	}
 }

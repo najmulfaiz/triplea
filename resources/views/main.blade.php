@@ -45,6 +45,9 @@
               <a class="nav-link" href="{{ url('/') }}">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{ url('/daftar-peserta') }}">Daftar Peserta</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ url('/login') }}">Login</a>
             </li>
             <li class="nav-item">
@@ -54,6 +57,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/') }}">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('/daftar-peserta') }}">Daftar Peserta</a>
+            </li>
               <li class="nav-item">
                     <a class="btn btn-primary" href="{{ url('/') }}"><span style="color: #fff;">Beli</span></a>
             </li>
@@ -61,7 +67,7 @@
                     <a class="nav-link" href="{{ url('/profile') }}">Profil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
+              <a class="nav-link" href="{{ url('/dashboard') }}">Data Partisipan</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/transaksi') }}">Transaksi {!!$jml_transaksi!=0?'<span class="badge badge-success">'.$jml_transaksi.'</span>':''!!}</a>
@@ -96,7 +102,7 @@
     @yield('content')
     <!-- Footer -->
 <footer class="footer bg-secondary" style="padding: 20px 0 30px;margin-top: 100px;">
-      <div class="container">
+      <div class="container text-center">
         <span class="text-white">&copy; {{date('Y')}} Booking Online</span>
       </div>
     </footer>

@@ -12,6 +12,9 @@
               <a class="nav-link" href="{{ url('/') }}">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{ url('/daftar-peserta') }}">Daftar Peserta</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ url('/login') }}">Login</a>
             </li>
             <li class="nav-item">
@@ -21,6 +24,9 @@
 
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('/daftar-peserta') }}">Daftar Peserta</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/') }}">Beli</a>

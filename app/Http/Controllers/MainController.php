@@ -26,6 +26,7 @@ use DNS2D;
 use QrCode;
 use App\Rekening;
 use App\EarlyBird;
+use App\Notifikasi;
 
 use App\Lib\Log;
 class MainController extends Controller
@@ -81,35 +82,40 @@ class MainController extends Controller
 	public function show(Request $request,$name){
 		if (empty(session('userid'))) {
 			# code...
-			return redirect('/login');
+			// return redirect('/login');
+			$explode = explode('-', $name);
+			$id = end($explode);
+
+			$data = Event::find($id);
+			if (is_null($data)) {
+				# code...
+				$log = new Log;
+				$url = url()->current();
+				$log->log("User Mengakses Halaman ".$url,$sessid);
+				abort(404);
+
+			}
+			$request->session()->put('eventid',$id);
+			return view('detail',compact('data'));
 		}
 		else{
-		$this->middleware('login-auth');
-		$sessid = session('userid');
+			$this->middleware('login-auth');
+			$sessid = session('userid');
 
+			$explode = explode('-', $name);
+			$id = end($explode);
 
-		$explode = explode('-', $name);
-		$id = end($explode);
+			$user = LoginMember::where('id',$sessid)->first();
+			$data = Event::find($id);
+			if (is_null($data)) {
+				# code...
+				$log = new Log;
+				$url = url()->current();
+				$log->log("User Mengakses Halaman ".$url,$sessid);
+				abort(404);
 
-		// echo $id;
-
-		// print_r($explode);
-
-
-// echo $id;
-		$user = LoginMember::where('id',$sessid)->first();
-		$data = Event::find($id);
-		if (is_null($data)) {
-			# code...
-			$log = new Log;
-			$url = url()->current();
-			$log->log("User Mengakses Halaman ".$url,$sessid);
-			abort(404);
-			// echo url()->current();
-
-		}
+			}
 		$request->session()->put('eventid',$id);
-		// print_r(session('eventid'));
 		return view('detail',compact('data','user'));
 
 		// return $data->group->kategori;
@@ -284,7 +290,7 @@ $user = LoginMember::find(session('userid'));
 
 				$request->session()->forget('ids');
 				// return $kategori;
-				return view('/checkout-multi',compact('group','personal','kategori','kategori_id','jersey','id','event'));
+				return view('/checkout-multi',compact('group','personal','kategori','kategori_id','jersey','id','event','user'));
 
 			}
 			$eventid = null;
@@ -339,26 +345,36 @@ $user = LoginMember::find(session('userid'));
 		  $earlyBird = EarlyBird::where('id_grup',session('id_grup'));
 
   if($earlyBird->count()>0){
-    $dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='1' and b.status_bayar='".$kategori_id."'");
-    $count = $dibeli;
-    $count = $count[0]->count;
-    // $count = 499;
-    $kuota = $earlyBird->first()->kuota;
-    // echo $kuota;
-    if($count < $kuota){
-    	  $harga= $earlyBird->first()->harga;
-    	  $state = "EARLY BIRD";
-    }
-    else{
+	    $kategori = Kategori::where('id_group', $earlyBird->first()->id_grup)->first();
+	  	$dibeli = DB::select("SELECT count(*) as count FROM `detail_transaction_id_event` a inner join transaction_id_event b on b.id = a.id_transaction where a.id_kategori ='".$kategori->id."' and b.status_bayar='1'");
+
+	    $tgl_awal = $earlyBird->first()->tgl_awal;
+	    $tgl_akhir = $earlyBird->first()->tgl_akhir;
+
+	    $count = $dibeli;
+	    $count = $count[0]->count;
+
+	    $kuota = $earlyBird->first()->kuota;
+    	if($count < $kuota){
+    		if(!is_null($tgl_awal) && !is_null($tgl_akhir)) {
+    			if((time() > strtotime($tgl_awal)) && (time() < strtotime($tgl_akhir))) {
+			    	$harga= $earlyBird->first()->harga;
+    	  			$state = "EARLY BIRD";
+			    } else {
+			    	$harga = $kategori->first()->harga;
+           			$state = "";   
+			    }
+    		} else {
+    	  		$harga= $earlyBird->first()->harga;
+    	  		$state = "EARLY BIRD";
+    		}
+    	}else{
           $harga = $kategori->first()->harga;
            $state = "";   
-           }
-
-  }
-  else{
-          $harga = $kategori->first()->harga;
-           $state = "";   
-
+        }
+  } else {
+        $harga = $kategori->first()->harga;
+        $state = ""; 
   }
 
   $event = Event::find(session('eventid'));
@@ -384,7 +400,7 @@ $user = LoginMember::find(session('userid'));
 	}
 
 public function checkoutPost(Request $request){
-
+	// return $request;
 	$this->middleware('login-auth');
 	// print_r($request->all());
 if (empty(session('userid'))) {
@@ -434,6 +450,17 @@ $code = $char . sprintf("%04s", $noUrut);
 	$harga = $request->harga;
 	$nama_bib = $request->nama_bib;
 // echo $code;
+
+	$error = false;
+	foreach ($partisipan as $value) {
+		if($value == '') {
+			$error = true;
+		}
+	}
+
+	if($error) {
+		return back()->with('danger', 'Maaf ada partisipan yang belum terdaftar dalam dashboard komunitas.');
+	}
 
 	$jml = 0;
 	for ($i=0; $i < count($partisipan); $i++) { 
@@ -595,8 +622,29 @@ $jml_total = $request->total;
 
         $message->to($to)->subject($subject);
 
-
     });
+
+	$trx            = $transaction->first();
+	$personalDetail = $trx->personal->first()->formParticipant->personalDetail;
+	$email          = $trx->user->email;
+	$no_hp          = $trx->user->nohp;
+	$nama           = $personalDetail->nama_awal . ' ' . $personalDetail->nama_akhir;
+	$invoice        = '#' . strtoupper(substr($trx->event->nama, 0, 2)) . '-' . $trx->id;
+	$event          = $trx->event;
+	$harga_akhir    = $trx->harga_akhir;
+	$rekening       = $trx->event->rekening;
+	$tenggat        = date('d-m-Y h:i:s', $expired_time);
+
+    $notifikasi = Notifikasi::where('id_event', $trx->event->id)->where('kategori', 'invoice')->first();
+	$pesan      = str_replace('{NAMA}', $nama, $notifikasi->isi_pesan);
+	$pesan      = str_replace('{KODE_INVOICE}', $invoice, $pesan);
+	$pesan      = str_replace('{TGL_KADALUARSA}', $tenggat, $pesan);
+	$pesan      = str_replace('{HARGA_AKHIR}', number_format($harga_akhir, 0, ',', '.'), $pesan);
+	$pesan      = str_replace('{NAMA_BANK}', $rekening->bank->nama_bank, $pesan);
+	$pesan      = str_replace('{NOREK}', $rekening->no_rekening, $pesan);
+	$pesan      = str_replace('{ATAS_NAMA}', $rekening->nama_pemilik, $pesan);
+	
+	$this->sms($no_hp, $pesan);
 
 
 
@@ -799,7 +847,7 @@ $jml_total = $request->total;
 		$user->password = bcrypt($password);
 		}
 		$user->tipe_akun = $tipe_akun;
-		$user->nohp = $no_hp;
+		$user->nohp = '+62' . $no_hp;
 		$user->jml_personal = $jml;
 		$user->komunitas = $komunitas;
 		$save  = $user->save();
@@ -843,7 +891,7 @@ $jml_total = $request->total;
 		}
 
 		$eventid = session('eventid');
-		$kategori = DB::select("SELECT kategori.harga,kategori.nama,kategori.id as id_kategori,kategori.usia_min,kategori.usia_max FROM `kategori` inner join `group` on kategori.id_group = group.id inner join event on group.id_event = event.id
+		$kategori = DB::select("SELECT kategori.harga,kategori.nama,kategori.id as id_kategori,kategori.usia_min,kategori.usia_max,group.nama as grup FROM `kategori` inner join `group` on kategori.id_group = group.id inner join event on group.id_event = event.id
 WHERE event.id='".$eventid."'
 ");
   
@@ -1023,4 +1071,66 @@ WHERE event.id='".$eventid."'
 		}
 
 	}
+
+	public function daftarPeserta() {
+		$events = Event::where('tanggal', '>', 'NOW()')->get();
+
+		return view('daftar-peserta', compact('events'));
+	}
+
+	public function eventPeserta($id) {
+		// $peserta = DB::select('SELECT b.*
+		// 						FROM detail_transaction_id_event a 
+		// 						INNER JOIN form_participant_id_event b ON b.id = a.id_form_participant
+		// 						INNER JOIN personal_detail c ON c.id = b.id_personal_detail
+		// 						INNER JOIN transaction_id_event d ON d.id = a.id_transaction
+		// 						WHERE d.id_event = "' . $id . '"');
+
+		// $peserta = DB::select('SELECT b.id, d.nama_awal, d.nama_akhir, e.komunitas
+		// 						FROM transaction_id_event a
+		// 						INNER JOIN detail_transaction_id_event b ON b.id_transaction = a.id
+		// 						INNER JOIN form_participant_id_event c ON c.id = b.id_form_participant
+		// 						INNER JOIN personal_detail d ON d.id = c.id_personal_detail
+		// 						INNER JOIN login_member e ON e.id = d.id_login_member
+		// 						WHERE 
+		// 							a.id_event = "' . $id . '"
+		// 							AND a.status_bayar = 1');
+
+		$peserta = DB::select("SELECT * from detail_transaction_id_event a 
+								inner join transaction_id_event b on a.id_transaction = b.id 
+								INNER JOIN form_participant_id_event c on a.id_form_participant = c.id 
+								INNER JOIN personal_detail d on c.id_personal_detail = d.id 
+								inner join ukuran_jersey e ON c.id_ukuran_jersey = e.id 
+								LEFT JOIN login_member f ON f.id = d.id_login_member
+								where b.id_event='$id' and b.status_bayar='1'");
+
+		return response()->json($peserta);
+	}
+
+	public function sms($nohp, $pesan)
+    {
+        $sms = [
+            'nohp' => $nohp,
+            'pesan' => $pesan
+        ];
+         
+        // Prepare dan Konfigurasi
+        $baseUrl = 'https://reguler.zenziva.net/apps/smsapi.php';
+        $config = [
+            'userkey' => 'vin7tp',
+            'passkey' => 'jlrzuhqd3d'
+        ];
+        $params = array_merge($config, $sms);
+        $uri = $baseUrl . '?' . http_build_query($params);
+         
+        // Kirim HTTP GET
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_URL, $uri);
+        $result = curl_exec($curl);
+         
+        // Tampilkan Hasil/Response dari Zenziva
+        header('Content-type: application/xml');
+        return $result;
+    }
 }

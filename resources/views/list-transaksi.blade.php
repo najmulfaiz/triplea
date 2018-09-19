@@ -37,25 +37,44 @@
 <!-- Text Content -->
 <div class="card-body ">
 <div class="table-responsive">
-  
+  <div class="alert alert-primary">
+    <i class="fa fa-info-circle"></i>&nbsp; Segera lunasi tagihan anda. invoice berlaku 1x24 jam dari tanggal pemesanan.
+  </div>
 <table class="table table-striped">
   <thead>
-    <th>Invoice</th>
+    <th>INVOICE</th>
     <th>Tanggal</th>
-    <th>Status</th>
+    <th>Nama</th>
+    <th>Partisipan</th>
     <th>Total</th>
-    <th>Opsi</th>
+    <th>Status</th>
+    <th>Detail</th>
   </thead>
   <tbody>
   @if ($transaksi->count()!=0)
     {{-- expr --}}
   @foreach ($transaksi as $t)
   <tr>
-    <td><a href="{{ url('trx/'.$t->id) }}">{{$t->id}}</a></td>
+    <td><a href="{{ url('trx/'.$t->id) }}">{{ strtoupper(substr($t->event->nama, 0, 2)) . '-' . $t->id}}</a></td>
     <td>{{$t->tgl_transaksi}}</td>
-    <td>{!!$t->status_bayar=='0'?'<span class="badge badge-danger">Belum Lunas</span>':'<span class="badge badge-success">Lunas</span>'!!}</td>
-    <td>{{number_format($t->harga_akhir,2,',','.')}}</td>
-    <td><a style="padding: 10px;" href="{{ url('trx/'.$t->id) }}" class="btn btn-success">Detail</a></td>
+    <td>
+      {{ $t->event->nama }}
+      <br><span class="text-muted" style="font-size: 10px;"><em>{{ $t->event->kota->nama }} - {{ date('d-m-Y', strtotime($t->event->tanggal)) }}</em></span>
+    </td>
+    <td>{{ count($t->personal) }}</td>
+    <td class="text-right">{{number_format($t->harga_akhir,0,',','.')}}</td>
+    <td>
+    	@if($t->status_bayar == '1')
+    		<span class="badge badge-success">Lunas</span>
+    	@elseif($t->status_bayar == '9')
+    		<span class="badge badge-secondary">Expired</span>
+    	@else
+    		<span class="badge badge-danger">Belum Lunas</span>
+    	@endif
+
+    	{{-- {!!$t->status_bayar=='0'?'<span class="badge badge-danger">Belum Lunas</span>':'<span class="badge badge-success">Lunas</span>'!!} --}}
+    </td>
+    <td><a style="padding: 10px;" href="{{ url('trx/'.$t->id) }}" class="btn btn-success"><i class="fa fa-search"></i></a></td>
   </tr>
     {{-- expr --}}
   @endforeach

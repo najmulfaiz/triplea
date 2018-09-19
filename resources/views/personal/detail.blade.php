@@ -1,23 +1,30 @@
-
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Personal Detail</a>
+    <a class="nav-link {{ $tab_selected == 'main' ? 'active' : '' }}" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="{{ $tab_selected == 'main' ? 'true' : 'false' }}">Personal Detail</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Kondisi Kesehatan</a>
+    <a class="nav-link {{ $tab_selected == 'medical' ? 'active' : '' }}" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="{{ $tab_selected == 'medical' ? 'true' : 'false' }}">Kondisi Kesehatan</a>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
 <br>
-  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-    
-  <h3>Profil</h3>
+  <div class="tab-pane fade {{ $tab_selected == 'main' ? 'show active' : '' }}" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-primary">
+          <i class="fa fa-info-circle"></i>&nbsp; Silahkan lengkapi isian form dibawah ini dengan benar, gunakan Kartu Identitas yang berlaku seperti SIM, KTP, Passport, pastikan semua data terisi. Terima Kasih
+        </div>
+      </div>
+    </div>
+  <!-- <h3>Profil</h3> -->
   <form id="form" action="{{ url('/update-personal/'.$id) }}" method="post" enctype="multipart/form-data">
-  <div class="col-lg-6" style="float: none;margin: 0 auto;">
+  <div class="row justify-content-md-center mb-2">
+    <div class="col-lg-6 text-center">
          <div id="image-preview" class="image-preview-2" style="background-image: url('uploads/{{$personal->foto_ktp}}');background-position: center center; background-size: cover;">
   <label class="image-label-2" for="image-upload" id="image-label">ID Card</label>
   <input class="image-upload-2" type="file" name="image" id="image-upload" />
 </div>
+  <span class="text-muted">File Gambar (max 200Kb)</span>
 <p id="error1" style="display:none; color:#FF0000;">
 Format Gambar Harus JPG, JPEG, PNG or GIF.
 </p>
@@ -25,6 +32,7 @@ Format Gambar Harus JPG, JPEG, PNG or GIF.
 Maksimal Ukuran Gambar 200KB
 </p>
 
+  </div>
   </div>
   <div class="row">
 
@@ -129,8 +137,15 @@ Maksimal Ukuran Gambar 200KB
 </form>
 
   </div>
-  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-  <h3>Emergency Medical</h3>
+  <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+     <div class="row">
+       <div class="col-lg-12">
+        <div class="alert alert-primary">
+          <i class="fa fa-info-circle"></i>&nbsp; Isikan data informasi kesehatan dan kontak person keluarga terdekat yang dapat dihubungi
+        </div>
+      </div>
+     </div>
+  <!-- <h3>Emergency Medical</h3> -->
   <form action="{{ url('/personal/medical/'.$id) }}" method="post">
   {{csrf_field()}}
   <div class="row">

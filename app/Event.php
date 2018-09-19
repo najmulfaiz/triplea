@@ -25,4 +25,11 @@ class Event extends Model
 	public function eventTerm(){
 		return $this->hasOne('App\EventTerm','id_event');
 	}
+	public function rekening(){
+		return $this->hasOne('App\Rekening', 'id_event');
+	}
+	public function eventWa()
+	{
+		return $this->hasOne('App\EventWa', 'id_event');
+	}
 }

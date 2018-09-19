@@ -31,7 +31,7 @@
  @include('components.nav')
  
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('{{ asset('assets/img/home-bg.jpg') }}');margin-bottom: 0;"  id="masthead">
+    <header class="masthead" style="background-image: url('{{ asset('/img/bg6.jpeg') }}');margin-bottom: 0;"  id="masthead">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
@@ -41,7 +41,7 @@
   <br>
   <!-- Another variation with a button -->
   <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search restaurants, spa, events, city, location, vendor">
+    <input type="text" class="form-control" placeholder="Masukkan Nama Event, Kota, Lokasi">
     <div class="input-group-append">
 
       <button class="btn btn-secondary" type="button">
@@ -117,14 +117,15 @@
 {{--     <center><h3>Book Your Event</h3></center> --}}
         <div class="row">
         @foreach ($data as $d)
-  <div class="col-lg-4 with-margin" style="height: 500px;">
+  <div class="col-lg-4 with-margin">
 
 <div class="card with-box-shadow">
       <a href="{{ url('/'.str_slug($d->nama,'-').'-'.$d->id) }}">
 
 <div id="bg"  class="bg" style="background-image: url('{{ asset('event/'.$d->logo) }}')">
-
-  
+  @if(count($d->group->first()->early_bird))
+    <div class="badge badge-info bgcolor-2" style="margin-top: 20px; margin-left: 20px;">EARLY BIRD</div>
+  @endif
 </div>
 <!-- Image -->
 
@@ -134,7 +135,11 @@
   <ul class="list-group">
     <li class="list-group-item"><h4>{{$d->nama}}</h4>
 </li>
-    <li class="list-group-item prop"><i class="fas fa-map-marker text-danger"></i>  {{$d->kota->nama}}
+<li class="list-group-item prop">
+      <i class="fa fa-map-marker text-danger"></i>&nbsp;  {{$d->kota->nama}}
+</li>
+<li class="list-group-item prop">
+  <i class="fa fa-calendar-alt text-info"></i>&nbsp; {{ date('d F Y', strtotime($d->tanggal)) }}
 </li>
   <ul class="list-group">
     <li class="list-group-item prop">
@@ -147,15 +152,21 @@
 {{-- </p> --}}
 </div>
 </a>
-<div class="card-footer">
-  <a href="#">
-  <img src="http://bookmyslot.meghinfotech.site/assets/uploads/profiles/5b62d85ad3d30.png" class="auth-img">
-  <span class="auth-text">Profile</span>
-{{--   <span class="float-right">Rp.1000;</span> --}}
-
-  </a>
-<br>
-
+<div class="card-footer" style="font-size: 16px">
+  <table>
+    <!-- <tr>
+      <td align="center" width="40px"><i class="fa fa-calendar-alt"></i></td>
+      <td>Tanggal</td>
+      <td align="center" width="12px">:</td>
+      <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
+    </tr> -->
+    <tr>
+      <td align="center"><i class="fa fa-ticket-alt"></i></td>
+      <td>Mulai</td>
+      <td align="center">:</td>
+      <td>Rp. {{ number_format($d->group->first()->early_bird->first()->harga, 0, ',', '.') }} <em class="text-muted" style="font-size: 14px;"><del>Rp. {{ number_format($d->group->first()->kategori->first()->harga, 0, ',', '.') }}</del></em></td>
+    </tr>
+  </table>
 </div>
   <a href="{{ url('/'.str_slug($d->nama,'-').'-'.$d->id) }}" class="btn btn-success btn-block btn-xs">Beli Tiket</a>
 
@@ -172,7 +183,7 @@
 
     <!-- Footer -->
 <footer class="footer bg-secondary" style="padding: 20px 0 30px;margin-top: 100px;">
-      <div class="container">
+      <div class="container text-center">
         <span style="font-size: 16px;" class="text-white">&copy; {{date('Y')}} Triple A Sport Management</span>
       </div>
     </footer>
@@ -199,6 +210,8 @@ var images = [
   "{{ asset('/img/bg1.jpeg') }}",
   "{{ asset('/img/bg2.jpeg') }}",
   "{{ asset('/img/bg3.jpeg') }}",
+  "{{ asset('/img/bg4.jpeg') }}",
+  "{{ asset('/img/bg5.jpeg') }}",
 ];
 var imageHead = document.getElementById("masthead");
 var i = 0;

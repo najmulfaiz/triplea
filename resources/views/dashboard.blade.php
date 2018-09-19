@@ -33,6 +33,7 @@
   {{session('danger')}}  
   </div>
 @endif
+
         <div class="row">
         <div class="col-lg-12 with-margin">
 
@@ -48,7 +49,13 @@
 <center><h3>Daftar Anggota</h3></center>
   {{-- expr --}}
 <button  style="padding: 10px 10px;" class="btn btn-success btn-modal-add" data-toggle="modal" data-target="#exampleModal">+ Tambah</button> 
-<br>
+
+<!-- <div class="col-lg-12"> -->
+  <div class="alert alert-primary mt-2">
+    <i class="fa fa-info-circle"></i>&nbsp; Berikut ini adalah daftar anggota dari Komunitasmu. Pastikan data KTP dan Medical terisi dengan benar
+  </div>
+<!-- </div> -->
+
 <div class="table-responsive">
 
 <table class="table table-striped">
@@ -75,8 +82,8 @@
         <td>{{$p->gol_darah}}</td>
 
              <td>{!! !is_null($p->foto_ktp) ? '<span class="badge badge-success">Ok</span>':'<span class="badge badge-danger">Belum</span>'!!}</td></td>
-        <td>{!! !is_null($p->medical) ? ($p->medical->nama != null ? '<span class="badge badge-success">Ok</span>' :'<span class="badge badge-danger">Belum</span>'):'<span class="badge badge-danger">Belum</span>'!!}</td>
-        <td><button data-id="{{$p->id}}" style="padding: 10px 10px;" class="btn btn-primary btn-modal" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-eye"></i></button> 
+        <td>{!! !is_null($p->medical) ? ($p->medical->nama != null ? '<span class="badge badge-success">Ok</span>' :'<span class="badge badge-danger btn-modal" data-type="main" data-id="' . $p->id . '">Belum</span>'):'<span class="badge badge-danger btn-modal" data-type="main" data-id="' . $p->id . '">Belum</span>'!!}</td>
+        <td><button data-id="{{$p->id}}" data-type="main" style="padding: 10px 10px;" class="btn btn-primary btn-modal"><i class="fas fa-eye"></i></button> 
         <form action="{{ url('/partisipan/'.$p->id.'/') }}" method="post" style="display: inline-block;">
       {{csrf_field()}}
       
@@ -125,21 +132,25 @@
 <div class="tab-content" id="myTabContent">
 <br>
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-    
-  <h3>Profil</h3>
+    <div class="row">
+    </div>
+  <!-- <h3>Profil</h3> -->
 
   <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-primary">
+          <i class="fa fa-info-circle"></i>&nbsp; Silahkan lengkapi isian form dibawah ini dengan benar, gunakan Kartu Identitas yang berlaku seperti SIM, KTP, Passport, pastikan semua data terisi. Terima Kasih
+        </div>
+      </div>
 <div class="col-lg-6">
 <form action="{{ url('/update-personal') }}" method="post" enctype="multipart/form-data">
 {{csrf_field()}}
-
-
   <div class="form-group">
-    <label>NIK</label>
+    <label>NIK/ID Card/No KTP/ No Passport</label>
     <input type="text" name="nik" data-id="{{$personal==null ? '' : $personal->nik}}" class="form-control" value="{{$personal==null ? '' : $personal->nik}}" id="nik">  
   </div>
   <div class="form-group">
-    <label>KTP</label>
+    <label>File Photo (ID Card/KTP/Passport)</label>
       <div id="image-preview" class="image-preview-2" style="background-image: url('uploads/{{!empty($personal) ? $personal->foto_ktp : ""}}');background-position: center center; background-size: cover;">
   <label class="image-label-2" for="image-upload" id="image-label">ID Card</label>
   <input class="image-upload-2" type="file" name="image" id="image-upload" />
@@ -249,7 +260,7 @@ Maksimal Ukuran Gambar 200KB
 
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-  <h3>Emergency Medical</h3>
+  <!-- <h3>Emergency Medical</h3> -->
   @if (!empty($personal))
     {{-- expr --}}
     @if ($personal->count() != 0)
@@ -257,6 +268,11 @@ Maksimal Ukuran Gambar 200KB
       {{csrf_field()}}
       
   <div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-primary">
+          <i class="fa fa-info-circle"></i>&nbsp; Isikan data informasi kesehatan dan kontak person keluarga terdekat yang dapat dihubungi
+        </div>
+      </div>
     <div class="col-lg-6">
       <div class="form-group">
         <label>Nama</label>
@@ -526,11 +542,18 @@ function cariAlamat(ref){
     });
 
   $(document).on('click','.btn-modal',function(){
+    $('#exampleModal').modal({
+      'backdrop': 'static',
+      'keyboard': false
+    });
+
     var id = $(this).attr('data-id');
+    var type = $(this).attr('data-type');
     // alert(id);
     $.ajax({
       url: "{{ url('/personal/') }}/"+id,
       method: "GET",
+      data: { type: type },
       success:function(res){
         $(".modal-body").html(res);
 
@@ -554,13 +577,11 @@ var a=0;
 $('#submit').prop("disabled", true);
 
 $('#image-upload').bind('change', function() {
-if ($('input:submit').attr('disabled',false)){
-  $('input:submit').attr('disabled',true);
-  }
+// if ($('input:submit').attr('disabled',false)){
+//   $('input:submit').attr('disabled',true);
+//   }
 var ext = $('#image-upload').val().split('.').pop().toLowerCase();
 if ($.inArray(ext, ['gif','jpg','jpeg','png']) == -1){
-
-  alert("xs");
   $('#error1').slideDown("slow");
   $('#error2').slideUp("slow");
   a=0;
@@ -619,9 +640,9 @@ var a=0;
 $('#submit').prop("disabled", true);
 
 $('#image-upload').bind('change', function() {
-if ($('input:submit').attr('disabled',false)){
-  $('input:submit').attr('disabled',true);
-  }
+// if ($('input:submit').attr('disabled',false)){
+//   $('input:submit').attr('disabled',true);
+//   }
 var ext = $('#image-upload').val().split('.').pop().toLowerCase();
 if ($.inArray(ext, ['gif','jpg','jpeg','png']) == -1){
 
@@ -646,6 +667,28 @@ if ($.inArray(ext, ['gif','jpg','jpeg','png']) == -1){
     }
 }
 });
+
+// $(document).on('click', '#submit', function(){
+//   var elemen = ['nik', 'nama_awal', 'nama_akhir', 'gol_darah', 'tgl_lahir', 'no_hp', 'alamat', 'negara', 'tempat_tinggal', 'provinsi', 'kota'];
+//   var error = false;
+
+//   $.each(elemen, function(index, value){
+//     if($('input[name='+value+']').val() == '') {
+//       $('input[name='+value+']').addClass('is-invalid');
+//       error = true;
+//     } else {
+//       $('input[name='+value+']').removeClass('is-invalid');
+//     }
+//   });
+
+//   if(error) {
+//     $('#pesan').html('<div class="alert alert-danger">Data harus di lengkapi dan di isi dengan benar.</div>');
+//     return false;
+//   }
+  
+//   $('#pesan').html('');
+//   $('#form').submit();
+// });
 //   $.validator.addMethod('filesize', function (value, element, param) {
 //     return this.optional(element) || (element.files[0].size <= param)
 // }, "Hahaha");

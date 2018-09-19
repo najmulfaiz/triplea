@@ -32,8 +32,13 @@ Route::group(['prefix' => 'api/v1'], function() {
 });
 Route::get('/mutasi', 'TransactionController@test');
 
+Route::get('/cekmutasi', 'TransactionController@mutasi');
 Route::get('/mutasi/email/{code}', 'TransactionController@mail');
 Route::get('/mutasi/json', 'TransactionController@json');
+Route::get('/expired', 'TransactionController@expired');
+
+Route::get('/daftar-peserta', 'MainController@daftarPeserta');
+Route::get('/event/{event_id}/peserta', 'MainController@eventPeserta')->name('event.peserta');
 
 Route::get('/email/invoice', 'MainController@mail');
 Route::get('/register', 'AuthController@register');
@@ -71,23 +76,24 @@ Route::get('/trx/{id}', 'MainController@trx');
 Route::get('/partisipan/tambah/{id}', 'MainController@tambahPartisipan');
 Route::get('/invoice/{id}', 'MainController@invoice');
 Route::post('/partisipan/{id}', 'HomeController@hapusPartisipan');
-Route::group(['prefix' => 'admin'], function() {
+//Route::group(['prefix' => 'admin'], function() {
     //
 // 	Route::get('/admin/index', 'AdminController@index');
 // Route::get('admin/index/data', 'AdminController@data');
-Route::get('/event/data', 'EventController@data');
-Route::resource('event', 'EventController');
+//Route::get('/event/data', 'EventController@data');
+//Route::resource('event', 'EventController');
 
-Route::post('event/create','EventController@store');
+//Route::post('event/create','EventController@store');
 
 
-Route::get('/member/data', 'MemberController@data');
-Route::resource('member', 'MemberController');
+//Route::get('/member/data', 'MemberController@data');
+//Route::resource('member', 'MemberController');
 
-Route::get('/invoice/data', 'InvoiceController@data');
-Route::resource('invoice', 'InvoiceController');
+//Route::get('/invoice/data', 'InvoiceController@data');
+//Route::resource('invoice', 'InvoiceController');
 
-});
+//}
+//);
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // });

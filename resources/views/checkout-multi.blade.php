@@ -104,7 +104,13 @@
 
   <!-- Modal -->
   <div class="alert alert-warning">
-    Diharapkan untuk memasukan data peserta terlebih dahulu sebelum memasukan kode diskon (bila ada)
+    <span class="font-weight-bold">Tata cara pemesanan : </span>
+    <ol class="mb-0 pl-3">
+      <li>Masukkan Partisipan</li>
+      <li>Klik Checkout jika sudah selesai</li>
+      <li>Invoice akan dikirim ke email <span class="font-weight-bold">{{ $user->email }}</span></li>
+      <li>Segera lakukan pembayaran maksimal 1x24 jam</li>
+    </ol>
   </div>
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -123,7 +129,14 @@
   </div>
 
   {{-- <p class="card-text"> --}}
-  <button type="button"  data-toggle="modal" data-id="{{$id}}" data-target="#exampleModal" class="btn btn-success btn-modal">Tambah Partisipan</button>
+  @if(count($user->personal_detail)) 
+    <button type="button"  data-toggle="modal" data-id="{{$id}}" data-target="#exampleModal" class="btn btn-success btn-modal">Tambah Partisipan</button>
+  @else
+    <div class="alert alert-warning">
+      Data partisipan kosong mohon, silahkan menambahkan data terlebih dahulu pada halaman dashboard.
+    </div>
+    <a href="{{ url('/dashboard') }}" class="btn btn-info">Dashboard</a>
+  @endif
   <br><br>
   <div class="table-responsive">
     
@@ -578,6 +591,10 @@
       var id_kategori = $("#kategori option:selected").val();
       var nama_bib = $("#nama_bib").val();
 
+      if(partisipan == '') {
+      alert('Pilih partisipan terlebih dahulu. Jika partisipan belum ada mohon mengisi data partisipan dahulu di menu dashboard.');
+      return false;
+    }
 
       // console.log(harga);
       // alert(id_kategori);

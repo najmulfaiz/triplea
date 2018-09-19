@@ -80,6 +80,7 @@
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0" width="40%">Keterangan Bank</td>
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight:bold" width="60%">{{$transaction->first()->keterangan_bank}}</td>
                             </tr>
+
                             <tr>
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0" width="40%">Total</td>
                                 <td style="border-top:1px solid rgba(0,0,0,0.12);border-bottom:1px solid rgba(0,0,0,0.12);padding:10px 0;font-weight:bold" width="60%">{{number_format($transaction->first()->harga_akhir,2,',','.')}}</td>

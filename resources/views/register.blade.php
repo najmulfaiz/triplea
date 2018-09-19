@@ -11,7 +11,7 @@
 {{csrf_field()}}
 
   <div class="row">
-    <div class="col-lg-5" style="margin: 0 auto;float: none;">
+    <div class="col-lg-12" style="margin: 0 auto;float: none;">
     @if (session('danger'))
     <div class="alert alert-danger">
       {{session('danger')}}
@@ -25,11 +25,21 @@
       {{-- expr --}}
     @endif
       <div class="card">
-      <div class="card-header">
-                  <h3>Register</h3>
-      </div>
         <div class="card-body">
-        <div class="form-group">
+        <div class="row mt-3 mb-3">
+          <div class="col-lg-7 pl-5">
+          <h6 class="font-weight-bold">Petunjuk Pendaftaran</h6>
+          <ol class="mt-3 pl-3">
+            <li class="pb-3">Isikan Email dan NoHP dengan benar (Valid)</li>
+            <li class="pb-3">Setelah berhasil mendaftar, silahkan cek email untuk verifikasi</li>
+            <li class="pb-3">Lengkapi Profil Partisipan</li>
+            <li class="pb-3">Lakukan Transaksi Pembelian Tiket</li>
+            <li class="pb-3">Invoice dan Bukti Bayar akan dikirim melalui Email yang didaftarkan</li>
+            <li class="pb-3">Invoice berlaku hanya 1 x 24 Jam. Lakukan pembayaran segera</li>
+          </ol>
+        </div>  
+        <div class="col-lg-5 pr-5">
+          <div class="form-group">
           <label>Email</label>
           <input type="email" name="email" class="form-control">
         </div>
@@ -65,7 +75,9 @@
           <center>
           Punya Akun? <a style="color: blue" href="{{ url('/login') }}">Login</a></center>
         </div>
-
+        </div>
+        </div>
+      
       </div>
     </div>
   </div>
@@ -76,6 +88,5 @@
 @endsection
 
 @push('script')
-lor
   {{-- expr --}}
 @endpush

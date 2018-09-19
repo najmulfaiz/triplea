@@ -34,7 +34,7 @@
 <form action="{{ url('/checkout') }}" method="post">
 {{csrf_field()}}
 
-<input type="hidden" name="early" value="{{$early}}">
+<input type="hidden" name="early" value="{{$state}}">
 <table class="table table-bordered">
   <tr>
     <td>Event</td><td>{{$event->nama}}</td>
@@ -458,6 +458,7 @@ $("#kode_diskon").keyup(  $.debounce(500,function(){
   }
   })
 );
+
 $(document).on('change','#kategori',function(){
     // alert("ok");
     var val = $(this).val();

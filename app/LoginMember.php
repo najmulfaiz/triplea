@@ -11,4 +11,9 @@ class LoginMember extends Model
 	public $timestamps = false;
 	protected $hidden = ['password'];
 
+	public function personal_detail()
+	{
+		return $this->hasMany('App\PersonalDetail', 'id_login_member');
+	}
+
 }

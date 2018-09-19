@@ -24,9 +24,8 @@
 			<option value="">Pilih</option>
 			@if ((count($kategori)))
 			@foreach ($kategori as $p)
-
 				{{-- expr --}}
-			<option data-price="{{$p->harga}}" value="{{$p->id_kategori}}">{{$p->nama.'('.$p->usia_min.' - '.$p->usia_max.')'}}</option>
+			<option data-price="{{$p->harga}}" value="{{$p->id_kategori}}">{{ $p->grup . ' - ' . $p->nama.'('.$p->usia_min.' - '.$p->usia_max.')'}}</option>
 
 				{{-- expr --}}
 			@endforeach
@@ -87,3 +86,40 @@
 }
 }
 </style>
+
+<script>
+	$(document).on('change', '#partisipan', function(){
+		var partisipan = {!! $partisipan->with('medical')->get() !!};
+		var pilih = $(this).val();
+		var error = false;
+
+		$.each(partisipan, function(index, value){
+			if(value.id == pilih) {
+				if(value.nik == '' || value.nik == null) {
+					error = true;
+				}
+
+				if(value.foto_ktp == '' || value.foto_ktp == null) {
+					error = true;
+				}
+
+				if(value.medical !== null) {
+					if(value.medical.nama == '' || value.medical.nama == null) {
+						error = true;
+					}
+
+					if(value.medical.nohp == '' || value.medical.nohp == null) {
+						error = true;
+					}
+				} else {
+					error = true;
+				}
+			}
+		});
+
+		if(error == true) {
+			alert('Silahkan melengkapi data participant (ID No, KTP, Medical Emergency)');
+			$('#partisipan').val('');
+		}
+	});
+</script>

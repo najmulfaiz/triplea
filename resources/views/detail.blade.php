@@ -253,20 +253,19 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 @if ($data->eventDetail!=null)
   {{-- expr --}}
   @if ($data->eventDetail->status_registrasi==1)
-@if ($user->tipe_akun=='0')
-  {{-- expr --}}
-{{--   {!!$data->eventDetail!=null ? $data->eventDetail->status_registrasi=='0'? '<span class="badge badge-danger">Close</span>':'<span class="badge badge-success">Open</span>' :''!!} --}}
-
-  <button type="button"  class="btn btn-success btn-checkout"  data-toggle="modal" data-target="#exampleModal" >
-  Beli
-  </button>
-@elseif($user->tipe_akun==1)
-<a class="btn btn-success btn-checkout" href="{{ url('/checkout/'.$data->id) }}">beli</a>
-@endif
+    @if(!isset($user) || !count($user))
+      <a class="btn btn-success btn-checkout" href="{{ url('/checkout/'.$data->id) }}">beli</a>
+    @endif
+    @if ($user->tipe_akun=='0')
+      {{-- expr --}}
+      <button type="button"  class="btn btn-success btn-checkout"  data-toggle="modal" data-target="#exampleModal" >
+        Beli
+      </button>
+    @elseif($user->tipe_akun==1)
+      <a class="btn btn-success btn-checkout" href="{{ url('/checkout/'.$data->id) }}">beli</a>
+    @endif
   @else
-
-<span class="badge badge-danger">Close</span>
-
+    <span class="badge badge-danger">Close</span>
   @endif
 @endif
 
